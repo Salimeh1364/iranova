@@ -41,14 +41,19 @@ export function traceArchReverse(
 }
 
 /** Closed arch profile: outer curve, then a smaller inner curve back. Suitable for extrusion. */
-export function createArchBandShape(half: number, rise: number, thickness: number) {
+export function createArchBandShape(
+  half: number,
+  rise: number,
+  thickness: number,
+  curve?: ArchCurve,
+) {
   const shape = new Shape();
   const innerHalf = Math.max(half - thickness, half * 0.5);
   const innerRise = Math.max(rise - thickness, rise * 0.45);
 
-  traceArchForward(shape, half, rise, true);
+  traceArchForward(shape, half, rise, true, curve);
   shape.lineTo(innerHalf, 0);
-  traceArchReverse(shape, innerHalf, innerRise);
+  traceArchReverse(shape, innerHalf, innerRise, curve);
   shape.closePath();
   return shape;
 }

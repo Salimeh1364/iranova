@@ -2,6 +2,7 @@
 
 import { useLayoutEffect, useRef } from "react";
 import { Object3D, SpotLight } from "three";
+import { palette } from "@/lib/palette";
 import { HALL } from "@/scene/hall";
 import type { ArtworkPlacement } from "@/lib/types";
 
@@ -39,13 +40,13 @@ function ArtworkSpot({ placement }: { placement: ArtworkPlacement }) {
     <>
       <spotLight
         ref={light}
-        position={[x, HALL.wallHeight - 0.08, z]}
-        angle={0.46}
-        penumbra={0.65}
-        intensity={18}
-        distance={6}
+        position={[x, HALL.wallHeight - 0.35, z]}
+        angle={0.38}
+        penumbra={0.82}
+        intensity={26}
+        distance={5.5}
         decay={2}
-        color="#fff0d8"
+        color={palette.sunlight}
       />
       <object3D ref={target} position={[x, y, z]} />
     </>

@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { MeshReflectorMaterial } from "@react-three/drei";
+import { getMarbleTexture } from "@/scene/materials/surfaces";
 
 const POOL = {
   width: 2.05,
@@ -9,56 +10,57 @@ const POOL = {
   centerZ: -1.2,
 } as const;
 
+const RIM = {
+  y: 0.055,
+  thickness: 0.16,
+  height: 0.1,
+} as const;
+
 /**
- * A shallow rectangular basin on the centerline.
- * MeshReflectorMaterial renders the hall once more into a mirror texture.
- * Resolution stays at 512 so that extra pass remains affordable.
- * The surrounding floor does not use a second reflector.
+ * A shallow stone basin on the centerline.
+ * The water is a second reflector, at a lower resolution than the floor,
+ * so the ceiling can mirror in the pool without a second full-size pass.
  */
 export function ReflectivePool() {
-  const rim = useMemo(
-    () => ({
-      y: 0.04,
-      thickness: 0.08,
-      height: 0.06,
-    }),
-    [],
-  );
+  const marble = useMemo(() => getMarbleTexture(), []);
+  const outerWidth = POOL.width + RIM.thickness * 2;
+  const outerLength = POOL.length + RIM.thickness * 2;
 
   return (
     <group position={[0, 0, POOL.centerZ]}>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.025, 0]}>
-        <planeGeometry args={[POOL.width, POOL.length]} />
+      {/* Water sits just above the floor so the floor reflector does not z-fight it. */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.03, 0]}>
+        <planeGeometry args={[POOL.width - 0.06, POOL.length - 0.06]} />
         <MeshReflectorMaterial
-          color="#c9e0dc"
-          roughness={0.12}
-          metalness={0.08}
+          color="#f4f8f7"
+          roughness={0.04}
+          metalness={0.02}
           mirror={1}
-          resolution={512}
-          blur={[140, 40]}
-          mixBlur={0.4}
-          mixStrength={1.15}
-          depthScale={1.15}
-          minDepthThreshold={0.2}
-          maxDepthThreshold={1.45}
+          resolution={256}
+          blur={[60, 20]}
+          mixBlur={0.2}
+          mixStrength={0.92}
+          depthScale={1.1}
+          minDepthThreshold={0.15}
+          maxDepthThreshold={1.35}
         />
       </mesh>
 
-      <mesh position={[0, rim.y, POOL.length / 2]} receiveShadow>
-        <boxGeometry args={[POOL.width + rim.thickness * 2, rim.height, rim.thickness]} />
-        <meshStandardMaterial color="#d5dbe3" roughness={0.4} />
+      <mesh position={[0, RIM.y, POOL.length / 2]} receiveShadow>
+        <boxGeometry args={[outerWidth, RIM.height, RIM.thickness]} />
+        <meshStandardMaterial map={marble} color="#f7f4ef" roughness={0.28} metalness={0.06} />
       </mesh>
-      <mesh position={[0, rim.y, -POOL.length / 2]} receiveShadow>
-        <boxGeometry args={[POOL.width + rim.thickness * 2, rim.height, rim.thickness]} />
-        <meshStandardMaterial color="#d5dbe3" roughness={0.4} />
+      <mesh position={[0, RIM.y, -POOL.length / 2]} receiveShadow>
+        <boxGeometry args={[outerWidth, RIM.height, RIM.thickness]} />
+        <meshStandardMaterial map={marble} color="#f7f4ef" roughness={0.28} metalness={0.06} />
       </mesh>
-      <mesh position={[-POOL.width / 2, rim.y, 0]} receiveShadow>
-        <boxGeometry args={[rim.thickness, rim.height, POOL.length]} />
-        <meshStandardMaterial color="#d5dbe3" roughness={0.4} />
+      <mesh position={[-POOL.width / 2, RIM.y, 0]} receiveShadow>
+        <boxGeometry args={[RIM.thickness, RIM.height, outerLength]} />
+        <meshStandardMaterial map={marble} color="#f7f4ef" roughness={0.28} metalness={0.06} />
       </mesh>
-      <mesh position={[POOL.width / 2, rim.y, 0]} receiveShadow>
-        <boxGeometry args={[rim.thickness, rim.height, POOL.length]} />
-        <meshStandardMaterial color="#d5dbe3" roughness={0.4} />
+      <mesh position={[POOL.width / 2, RIM.y, 0]} receiveShadow>
+        <boxGeometry args={[RIM.thickness, RIM.height, outerLength]} />
+        <meshStandardMaterial map={marble} color="#f7f4ef" roughness={0.28} metalness={0.06} />
       </mesh>
     </group>
   );

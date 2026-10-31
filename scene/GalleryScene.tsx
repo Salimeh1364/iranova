@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
+import { palette } from "@/lib/palette";
 import { FrameCamera, initialCamera } from "@/scene/FrameCamera";
 import { GalleryHall } from "@/scene/GalleryHall";
 import { HALL } from "@/scene/hall";
@@ -10,6 +11,7 @@ import { HALL } from "@/scene/hall";
  * The reflector inside the pool updates from the render loop, so the loop
  * stays on. Pixel ratio is capped, and only the sun light below casts shadows.
  * Tone mapping stays on so the window light softens instead of clipping the floor to white.
+ * Fog is only the far end of the hall, so the nearest frames stay clear.
  */
 export default function GalleryScene() {
   return (
@@ -19,15 +21,16 @@ export default function GalleryScene() {
       gl={{ antialias: true, alpha: false }}
       camera={initialCamera}
     >
-      <color attach="background" args={["#fff6ea"]} />
+      <color attach="background" args={["#f6f0e4"]} />
+      <fog attach="fog" args={["#f6f0e4", 18, 46]} />
       <FrameCamera />
-      <hemisphereLight args={["#fff8f2", "#e2e8f0", 1.05]} />
-      <ambientLight intensity={0.62} color="#fff8f2" />
+      <hemisphereLight args={[palette.sunlight, "#e7edf2", 0.7]} />
+      <ambientLight intensity={0.36} color={palette.sunlight} />
       {/* Daylight entering through the far arch and aimed down the length of the hall. */}
       <directionalLight
-        position={[0, 6.2, -HALL.length / 2 + 1.4]}
-        intensity={3.2}
-        color="#fffaf4"
+        position={[1.4, 8.4, -HALL.length / 2 + 2]}
+        intensity={2.15}
+        color={palette.sunlight}
         castShadow
         shadow-mapSize={[1024, 1024]}
         shadow-camera-near={0.5}

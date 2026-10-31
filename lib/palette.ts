@@ -16,4 +16,8 @@ export const palette = {
   wood: "#57352B",
   ink: "#174A78",
   lightWarm: "#FFF3DE",
+  /** Matte gallery plaster. Kept off the craft enamel so the walls stay quiet. */
+  plaster: "#f8fafc",
+  /** Warm daylight used by the sun, the fill, and the picture lights. */
+  sunlight: "#fffbeb",
 } as const;

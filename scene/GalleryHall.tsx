@@ -1,49 +1,57 @@
 "use client";
 
 import { useMemo } from "react";
+import { BoxGeometry } from "three";
 import { artworks } from "@/content/artworks";
 import { ArtFrame } from "@/scene/artwork/ArtFrame";
 import { GalleryWall } from "@/scene/architecture/GalleryWall";
+import { PlasterPier } from "@/scene/architecture/PlasterPier";
+import { PolishedFloor } from "@/scene/architecture/PolishedFloor";
 import { ReflectivePool } from "@/scene/architecture/ReflectivePool";
 import { VaultedArch } from "@/scene/architecture/VaultedArch";
 import { WindowArch } from "@/scene/architecture/WindowArch";
 import { SpotlightGroup } from "@/scene/lighting/SpotlightGroup";
-import { BAY_DEPTH, HALL } from "@/scene/hall";
-import { getConcreteTexture } from "@/scene/materials/surfaces";
+import { BAY_DEPTH, EXHIBITION, HALL } from "@/scene/hall";
+import { tileByPosition } from "@/scene/geometry/surfaceUvs";
+import { BrickSurface } from "@/scene/materials/BrickSurface";
+import { PlasterSurface } from "@/scene/materials/PlasterSurface";
 
 /**
  * The grand hall, assembled from one repeated vault bay and shared walls.
  * +Z is the standing point. -Z is the arched window. The pool sits on the centerline.
  */
 export function GalleryHall() {
-  const concrete = useMemo(() => getConcreteTexture(), []);
   const bayStarts = Array.from({ length: HALL.bays }, (_, index) => HALL.length / 2 - index * BAY_DEPTH);
+  const pierX = EXHIBITION.partitionX - 0.22;
+  const sideWall = useMemo(() => {
+    const geometry = new BoxGeometry(HALL.wallThickness, HALL.wallHeight, HALL.length);
+    // Position-based UVs keep a brick about a handspan wide along the long wall.
+    tileByPosition(
+      geometry,
+      (_x, _y, z) => (z / HALL.length) * 42,
+      (_x, y) => (y / HALL.wallHeight) * 10,
+    );
+    return geometry;
+  }, []);
 
   return (
     <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]} receiveShadow>
-        <planeGeometry args={[HALL.width, HALL.length]} />
-        <meshPhysicalMaterial
-          map={concrete}
-          color="#ffffff"
-          roughness={0.42}
-          metalness={0.02}
-          clearcoat={0.12}
-          clearcoatRoughness={0.55}
-        />
-      </mesh>
+      <PolishedFloor />
 
       <GalleryWall side="left" />
       <GalleryWall side="right" />
 
-      {/* Brick side walls carry the vault. The white partitions stand in front of them. */}
-      <mesh position={[-HALL.width / 2, HALL.wallHeight / 2, 0]} receiveShadow>
-        <boxGeometry args={[HALL.wallThickness, HALL.wallHeight, HALL.length]} />
-        <meshStandardMaterial color="#d4b896" roughness={0.9} />
+      {EXHIBITION.pierZ.flatMap((z) => [
+        <PlasterPier key={`west-${z}`} position={[-pierX, 0, z]} />,
+        <PlasterPier key={`east-${z}`} position={[pierX, 0, z]} />,
+      ])}
+
+      {/* Brick side walls carry the vault. The plaster partitions stand in front of them. */}
+      <mesh geometry={sideWall} position={[-HALL.width / 2, HALL.wallHeight / 2, 0]} receiveShadow>
+        <BrickSurface bumpScale={0.03} roughness={0.86} />
       </mesh>
-      <mesh position={[HALL.width / 2, HALL.wallHeight / 2, 0]} receiveShadow>
-        <boxGeometry args={[HALL.wallThickness, HALL.wallHeight, HALL.length]} />
-        <meshStandardMaterial color="#d4b896" roughness={0.9} />
+      <mesh geometry={sideWall} position={[HALL.width / 2, HALL.wallHeight / 2, 0]} receiveShadow>
+        <BrickSurface bumpScale={0.03} roughness={0.86} />
       </mesh>
 
       {bayStarts.map((z) => (
@@ -55,7 +63,7 @@ export function GalleryHall() {
       {/* Closes the entrance end, behind the camera, so the vault does not open onto the background. */}
       <mesh position={[0, HALL.wallHeight / 2, HALL.length / 2]} receiveShadow>
         <boxGeometry args={[HALL.width, HALL.wallHeight, HALL.wallThickness]} />
-        <meshStandardMaterial color="#f7f4ef" roughness={0.92} />
+        <PlasterSurface />
       </mesh>
 
       <ReflectivePool />

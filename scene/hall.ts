@@ -22,6 +22,16 @@ export const INNER_SPAN = HALL.width - HALL.wallThickness;
 export const VAULT_CROWN = HALL.wallHeight + HALL.vaultRise;
 
 /**
+ * Exhibition walls sit inside the brick shell, leaving an aisle around the pool.
+ * Piers break the long plaster run without covering the frames.
+ */
+export const EXHIBITION = {
+  partitionX: 3.2,
+  partitionThickness: 0.14,
+  pierZ: [5.4, 0.15, -4.8] as const,
+} as const;
+
+/**
  * Fixed viewpoint. Free walking is a later milestone, so the lens only
  * reframes this same standing position when the window resizes.
  */

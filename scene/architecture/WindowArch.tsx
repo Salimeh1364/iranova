@@ -4,7 +4,8 @@ import { useMemo } from "react";
 import { ExtrudeGeometry, Path, Shape } from "three";
 import { HALL, VAULT_CROWN } from "@/scene/hall";
 import { createArchFillShape, traceArchForward } from "@/scene/geometry/archProfile";
-import { getBrickTexture } from "@/scene/materials/surfaces";
+import { tileByPosition } from "@/scene/geometry/surfaceUvs";
+import { BrickSurface } from "@/scene/materials/BrickSurface";
 
 const WINDOW = {
   half: 2.35,
@@ -40,6 +41,11 @@ export function WindowArch() {
       curveSegments: 28,
     });
     geometry.translate(0, 0, -0.14);
+    tileByPosition(
+      geometry,
+      (x) => (x / halfWidth) * 8,
+      (_x, y) => (y / VAULT_CROWN) * 6,
+    );
     geometry.computeVertexNormals();
     return geometry;
   }, []);
@@ -56,22 +62,20 @@ export function WindowArch() {
     return geometry;
   }, []);
 
-  const brick = useMemo(() => getBrickTexture(), []);
-
   return (
     <group position={[0, 0, -HALL.length / 2]}>
       <mesh geometry={wall} receiveShadow castShadow>
-        <meshStandardMaterial map={brick} color="#ffffff" roughness={0.84} />
+        <BrickSurface bumpScale={0.035} roughness={0.82} />
       </mesh>
       <mesh geometry={glass} position={[0, 0, 0.06]}>
-        {/* A luminous pane. Full transmission would redraw the hall again, on top of the pool reflector. */}
+        {/* A luminous pane. Full transmission would redraw the hall again, on top of the two reflectors. */}
         <meshStandardMaterial
           color="#fffdf8"
           emissive="#fff6e8"
-          emissiveIntensity={1.6}
+          emissiveIntensity={0.85}
           roughness={0.08}
           transparent
-          opacity={0.28}
+          opacity={0.34}
           depthWrite={false}
         />
       </mesh>
