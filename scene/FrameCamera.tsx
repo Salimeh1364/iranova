@@ -1,8 +1,4 @@
-"use client";
-
-import { useLayoutEffect } from "react";
-import { Object3D, PerspectiveCamera } from "three";
-import { useThree } from "@react-three/fiber";
+import { Object3D } from "three";
 import { CAMERA_FIT } from "@/scene/hall";
 
 const framedView = new Object3D();
@@ -23,33 +19,3 @@ export const initialCamera = {
   position: [CAMERA_FIT.eye[0], CAMERA_FIT.eye[1], CAMERA_FIT.eye[2]] as [number, number, number],
   rotation: framedRotation,
 };
-
-type ManualCamera = PerspectiveCamera & { manual: boolean };
-
-/**
- * Keeps the vault, the pool, and both exhibition walls inside the view.
- * The visitor does not move. This only replaces the lens.
- */
-export function FrameCamera() {
-  const size = useThree((state) => state.size);
-  const set = useThree((state) => state.set);
-  const invalidate = useThree((state) => state.invalidate);
-
-  useLayoutEffect(() => {
-    const aspect = size.width > 0 && size.height > 0 ? size.width / size.height : 1;
-    // A fixed wide lens. Fitting the fov to the walls made the hall feel like a corridor.
-    const fov = CAMERA_FIT.fov;
-
-    const camera: ManualCamera = Object.assign(new PerspectiveCamera(fov, aspect, 0.1, 64), {
-      // Stops React Three Fiber from overwriting this fitted aspect on resize.
-      manual: true,
-    });
-    camera.position.set(CAMERA_FIT.eye[0], CAMERA_FIT.eye[1], CAMERA_FIT.eye[2]);
-    camera.lookAt(CAMERA_FIT.lookAt[0], CAMERA_FIT.lookAt[1], CAMERA_FIT.lookAt[2]);
-    camera.updateProjectionMatrix();
-    set({ camera });
-    invalidate();
-  }, [invalidate, set, size.height, size.width]);
-
-  return null;
-}

@@ -11,6 +11,8 @@ export type Dictionary = {
     subtitle: string;
     roomName: string;
     previewNote: string;
+    walkStart: string;
+    walkHint: string;
     loading: string;
     unavailable: string;
   };

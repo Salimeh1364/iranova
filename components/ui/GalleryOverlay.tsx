@@ -1,6 +1,7 @@
 "use client";
 
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { WalkPrompt } from "@/components/ui/WalkPrompt";
 import { useI18n } from "@/i18n/I18nProvider";
 
 export function GalleryChrome({ children }: { children: React.ReactNode }) {
@@ -17,6 +18,7 @@ export function GalleryChrome({ children }: { children: React.ReactNode }) {
           <p className="gallery-subtitle">{messages.gallery.subtitle}</p>
         </div>
         <LanguageSwitcher />
+        <WalkPrompt />
       </div>
     </div>
   );

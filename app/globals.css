@@ -167,6 +167,51 @@ h1 {
   outline-offset: 2px;
 }
 
+.walk-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 11;
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  min-width: 16rem;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.walk-prompt strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.walk-prompt span {
+  max-width: 18rem;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.walk-prompt.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.walk-prompt:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
 @media (max-width: 720px) {
   .gallery-title-block {
     top: 16px;

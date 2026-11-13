@@ -10,11 +10,13 @@ export const en: Dictionary = {
     kicker: "Iranian art and culture",
     title: "Iranova",
     subtitle: "A quiet hall for works still to come.",
-    roomName: "Grand hall",
-    previewNote: "Still view. Free movement will follow.",
+    roomName: "Exhibition room",
+    previewNote: "Click the hall to look around. Walk with WASD or the arrow keys.",
+    walkStart: "Click to walk",
+    walkHint: "Look with the mouse. Esc releases the cursor.",
     loading: "Preparing the gallery…",
     unavailable:
-      "This browser cannot show the 3D gallery. The grand hall has a brick vault, pale exhibition walls, arched windows, and a reflecting pool.",
+      "This browser cannot show the 3D gallery. The rooms are light olive, linked by wide doorways, with off-white columns and a white rectangular entrance.",
   },
   language: {
     label: "Language",
