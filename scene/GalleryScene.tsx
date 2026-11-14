@@ -1,7 +1,6 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { palette } from "@/lib/palette";
 import { initialCamera } from "@/scene/FrameCamera";
 import { PlayerController } from "@/scene/controls/PlayerController";
 import { GalleryHall } from "@/scene/GalleryHall";
@@ -19,19 +18,19 @@ export default function GalleryScene() {
       gl={{ antialias: true, alpha: false }}
       camera={initialCamera}
     >
-      {/* Soft daylight outside the open portal. */}
-      <color attach="background" args={["#d7e3cf"]} />
-      <fog attach="fog" args={["#e4eee6", 24, 56]} />
+      {/* Pale warm sky, close to the daylight in the courtyard photograph. */}
+      <color attach="background" args={["#e7efe6"]} />
+      <fog attach="fog" args={["#e7efe4", 24, 56]} />
       <PlayerController />
-      {/* Bright sky on upward faces, pale ground on the ceiling, so the olive stays lit. */}
-      <hemisphereLight args={["#f4f7f2", "#e6e8e2", 0.7]} />
-      {/* Held under the sun so the shadow on the floor still reads. */}
-      <ambientLight intensity={0.38} color={palette.white} />
-      {/* Sun through the portal. This is the only shadow map, at 512px. */}
+      {/* Warm sky on the floor, neutral ground on the ceiling, so the olive stays #8a9a86. */}
+      <hemisphereLight args={["#f6efe2", "#e6e8e2", 0.62]} />
+      {/* Soft fill, warm white, held low so the sun through the portal still models the room. */}
+      <ambientLight intensity={0.34} color="#fff6ea" />
+      {/* Warm daylight aimed through the portal. This is the only shadow map, at 512px. */}
       <directionalLight
-        position={[3.5, 11, 16]}
-        intensity={1.65}
-        color="#fffaf4"
+        position={[0.6, 8.2, 18]}
+        intensity={1.45}
+        color="#ffe6c4"
         castShadow
         shadow-mapSize={[512, 512]}
         shadow-camera-near={2}

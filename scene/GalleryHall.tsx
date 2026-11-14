@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { artworks } from "@/content/artworks";
 import { ArtFrame } from "@/scene/artwork/ArtFrame";
 import { Columns } from "@/scene/architecture/Columns";
@@ -19,7 +20,10 @@ export function GalleryHall() {
       <GalleryRooms />
       <Columns />
       <EntranceDoor />
-      <GardenView />
+      {/* The photograph loads on its own, so the hall can draw first. */}
+      <Suspense fallback={null}>
+        <GardenView />
+      </Suspense>
       <CeilingLights />
       <SpotlightGroup placements={artworks} />
       {artworks.map((placement) => (
