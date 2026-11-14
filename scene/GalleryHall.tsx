@@ -2,6 +2,8 @@
 
 import { Suspense } from "react";
 import { figurePlacements, figures } from "@/content/famousFigures";
+import { landmarkPlacements, landmarks } from "@/content/iranLandmarks";
+import { LandmarkFrame } from "@/scene/artwork/LandmarkFrame";
 import { PortraitFrame } from "@/scene/artwork/PortraitFrame";
 import { Columns } from "@/scene/architecture/Columns";
 import { EntrancePortal } from "@/scene/architecture/EntrancePortal";
@@ -27,9 +29,12 @@ export function GalleryHall() {
       </Suspense>
       <CeilingLights />
       <SunShafts />
-      <SpotlightGroup placements={figurePlacements} />
+      <SpotlightGroup placements={[...figurePlacements, ...landmarkPlacements]} />
       {figures.map((figure) => (
         <PortraitFrame key={figure.id} figure={figure} />
+      ))}
+      {landmarks.map((landmark) => (
+        <LandmarkFrame key={landmark.id} landmark={landmark} />
       ))}
     </group>
   );

@@ -18,6 +18,8 @@ export type FigureCopy = {
 export type FamousFigure = {
   id: string;
   image: string;
+  /** Photographer and license for the file in `public/images/figures/`. */
+  credit?: string;
   placement: ArtworkPlacement;
   copy: Record<Locale, FigureCopy>;
 };
@@ -30,6 +32,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "mirzakhani",
     image: "/images/figures/mirzakhani.jpg",
+    credit: "Florian Caullery, CC BY-SA 3.0",
     placement: portraitPlacement("mirzakhani", "foyerWest", 3),
     copy: {
       en: {
@@ -58,6 +61,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "kiarostami",
     image: "/images/figures/kiarostami.jpg",
+    credit: "Hamed Malekpour, CC BY 4.0",
     placement: portraitPlacement("kiarostami", "foyerEast", 11),
     copy: {
       en: {
@@ -86,6 +90,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "shajarian",
     image: "/images/figures/shajarian.jpg",
+    credit: "Azin Haghighi, CC BY 4.0",
     placement: portraitPlacement("shajarian", "galleryFarLeft", 19),
     copy: {
       en: {
@@ -114,6 +119,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "ansari",
     image: "/images/figures/ansari.jpg",
+    credit: "NASA, public domain",
     placement: portraitPlacement("ansari", "galleryFarRight", 27),
     copy: {
       en: {
@@ -142,6 +148,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "samii",
     image: "/images/figures/samii.jpg",
+    credit: "Asghar Khamseh, CC BY 4.0",
     placement: portraitPlacement("samii", "galleryEastBetween", 35),
     copy: {
       en: {
@@ -170,6 +177,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "sadr",
     image: "/images/figures/sadr.jpg",
+    credit: "Mitra Goberville, CC BY-SA 4.0",
     placement: portraitPlacement("sadr", "foyerWestDoor", 43),
     copy: {
       en: {
@@ -198,6 +206,7 @@ export const figures: readonly FamousFigure[] = [
   {
     id: "farhadi",
     image: "/images/figures/farhadi.jpg",
+    credit: "Frankie Fouganthin, CC BY-SA 4.0",
     placement: portraitPlacement("farhadi", "foyerEastDoor", 51),
     copy: {
       en: {

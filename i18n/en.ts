@@ -9,7 +9,7 @@ export const en: Dictionary = {
   gallery: {
     kicker: "Iranian art and culture",
     title: "Iranova",
-    subtitle: "Portraits of Iranian figures in science, art, cinema, and music.",
+    subtitle: "Portraits of Iranian figures, and photographs of historic landmarks.",
     roomName: "Exhibition room",
     previewNote: "Click the hall to look around. Walk with WASD or the arrow keys.",
     walkStart: "Click to walk",
@@ -27,5 +27,9 @@ export const en: Dictionary = {
   figures: {
     series: "Iranian figures",
     close: "Close",
+    photo: "Photograph:",
+  },
+  landmarks: {
+    series: "Landmarks of Iran",
   },
 };

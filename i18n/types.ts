@@ -25,5 +25,9 @@ export type Dictionary = {
   figures: {
     series: string;
     close: string;
+    photo: string;
+  };
+  landmarks: {
+    series: string;
   };
 };

@@ -270,7 +270,13 @@ h1 {
   aspect-ratio: 4 / 5;
   margin-top: 0.9rem;
   object-fit: cover;
+  object-position: center 18%;
   background: #d7e0d4;
+}
+
+.figure-panel img.landscape {
+  aspect-ratio: 3 / 2;
+  object-position: center;
 }
 
 .figure-panel h2 {
@@ -294,6 +300,13 @@ h1 {
   margin: 0.9rem 0 0;
   font-size: 0.98rem;
   line-height: 1.55;
+}
+
+.figure-credit {
+  margin: 1.2rem 0 0;
+  color: rgba(23, 42, 36, 0.62);
+  font-size: 0.72rem;
+  line-height: 1.4;
 }
 
 html[dir="rtl"] .figure-panel h2,
