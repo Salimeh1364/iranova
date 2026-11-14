@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
-import { AmbientPiano } from "@/lib/ambientPiano";
+import { AmbientTrack } from "@/lib/ambientTrack";
 
 // Movement keys that mean the visitor has started to walk.
 const MOVE_KEYS = new Set([
@@ -17,22 +17,23 @@ const MOVE_KEYS = new Set([
 ]);
 
 /**
- * Calm piano for the hall.
+ * Hall recording from `/audio/iranian-ambient.mp3`.
  * Browsers block sound until a gesture, so the loop waits for the first
  * walk key, a drag or click in the scene, or a press of this button.
+ * A missing file leaves the button in place and plays nothing.
  */
 export function AmbientAudioPlayer() {
   const { messages } = useI18n();
-  const piano = useRef<AmbientPiano | null>(null);
+  const track = useRef<AmbientTrack | null>(null);
   const started = useRef(false);
   const mutedRef = useRef(false);
   const [muted, setMuted] = useState(false);
 
   useEffect(() => {
-    const engine = new AmbientPiano();
-    piano.current = engine;
+    const engine = new AmbientTrack();
+    track.current = engine;
 
-    // The first qualifying gesture opens the audio device and fades the piano in.
+    // The first qualifying gesture starts the file and fades it in.
     const begin = () => {
       if (started.current || mutedRef.current) return;
       started.current = true;
@@ -59,14 +60,14 @@ export function AmbientAudioPlayer() {
       window.removeEventListener("keydown", onKey);
       window.removeEventListener("pointerdown", onPointer);
       engine.dispose();
-      piano.current = null;
+      track.current = null;
     };
   }, []);
 
   const onToggle = () => {
-    const engine = piano.current;
+    const engine = track.current;
     if (!engine) return;
-    // The button itself is a gesture, so it can start the piano before a walk.
+    // The button itself is a gesture, so it can start the music before a walk.
     if (!started.current) {
       started.current = true;
       mutedRef.current = false;

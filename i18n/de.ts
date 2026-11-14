@@ -33,7 +33,7 @@ export const de: Dictionary = {
     series: "Wahrzeichen Irans",
   },
   audio: {
-    mute: "Klavier stummschalten",
-    unmute: "Klavier abspielen",
+    mute: "Musik stummschalten",
+    unmute: "Musik abspielen",
   },
 };

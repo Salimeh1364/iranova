@@ -32,7 +32,7 @@ export const fa: Dictionary = {
     series: "نمادهای ایران",
   },
   audio: {
-    mute: "بی‌صدا کردن پیانو",
-    unmute: "پخش پیانو",
+    mute: "بی‌صدا کردن موسیقی",
+    unmute: "پخش موسیقی",
   },
 };

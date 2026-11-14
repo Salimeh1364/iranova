@@ -33,7 +33,7 @@ export const en: Dictionary = {
     series: "Landmarks of Iran",
   },
   audio: {
-    mute: "Mute piano",
-    unmute: "Play piano",
+    mute: "Mute music",
+    unmute: "Play music",
   },
 };
