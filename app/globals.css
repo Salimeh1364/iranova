@@ -131,7 +131,7 @@ h1 {
   position: absolute;
   top: 24px;
   inset-inline-end: 32px;
-  z-index: 10;
+  z-index: 40;
   display: flex;
   gap: 0.15rem;
   padding: 0.22rem;
@@ -210,6 +210,96 @@ h1 {
 .walk-prompt:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;
+}
+
+.figure-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: flex;
+  background: rgba(24, 32, 28, 0.28);
+  pointer-events: auto;
+}
+
+.figure-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(26rem, 100%);
+  height: 100%;
+  /* Inline start, so the language switcher on the inline end stays reachable. */
+  margin-inline-end: auto;
+  padding: 1.4rem 1.5rem 2rem;
+  overflow: auto;
+  background: rgba(248, 250, 252, 0.94);
+  color: var(--ink);
+  box-shadow: 0 0 40px rgba(24, 32, 28, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.figure-close {
+  align-self: flex-end;
+  margin: 0 0 0.4rem;
+  padding: 0.35rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.figure-close:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.figure-kicker {
+  margin: 0;
+  color: var(--gold);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.figure-panel img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  margin-top: 0.9rem;
+  object-fit: cover;
+  background: #d7e0d4;
+}
+
+.figure-panel h2 {
+  margin: 1rem 0 0;
+  color: var(--ink);
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  text-shadow: none;
+}
+
+.figure-meta {
+  margin: 0.4rem 0 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.figure-bio {
+  margin: 0.9rem 0 0;
+  font-size: 0.98rem;
+  line-height: 1.55;
+}
+
+html[dir="rtl"] .figure-panel h2,
+html[dir="rtl"] .figure-kicker {
+  font-family: var(--font-persian), var(--font-sans), sans-serif;
+  letter-spacing: 0;
 }
 
 @media (max-width: 720px) {

@@ -16,13 +16,13 @@ export const palette = {
   lightWarm: "#FFF3DE",
   // Pure white for the spotlights, #ffffff.
   white: "#ffffff",
-  // Light olive sage for the main walls, #8a9a86. Roughness 0.85 in the plaster material.
-  plaster: "#8a9a86",
+  // Matte olive, two shades above #8a9a86. #a8b8a4 stays soft and airy. Roughness 0.85.
+  plaster: "#a8b8a4",
   // Crisp off-white for the columns and the ceiling, #f8fafc.
   trim: "#f8fafc",
-  // Smooth light concrete, #dcdad5. The deeper value is the floor speckle.
-  stone: "#dcdad5",
-  stoneDeep: "#c5c3bd",
+  // Pale warm stone for the floor, #f0eee9. The deeper value is the step nosing.
+  stone: "#f0eee9",
+  stoneDeep: "#e4e0da",
   // Daylight through the glazed entrance, #fffaf4.
   daylight: "#fffaf4",
   // Bright white light for the ceiling spots and the picture lights.

@@ -9,7 +9,7 @@ export const de: Dictionary = {
   gallery: {
     kicker: "Iranische Kunst und Kultur",
     title: "Iranova",
-    subtitle: "Eine stille Halle für Werke, die noch folgen.",
+    subtitle: "Porträts iranischer Persönlichkeiten aus Wissenschaft, Kunst, Film und Musik.",
     roomName: "Ausstellungsraum",
     previewNote: "Klicken Sie in die Halle, um sich umzusehen. Gehen mit WASD oder den Pfeiltasten.",
     walkStart: "Klicken zum Gehen",
@@ -23,5 +23,9 @@ export const de: Dictionary = {
     en: "English",
     de: "Deutsch",
     fa: "فارسی",
+  },
+  figures: {
+    series: "Iranische Persönlichkeiten",
+    close: "Schließen",
   },
 };

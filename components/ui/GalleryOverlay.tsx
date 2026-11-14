@@ -1,5 +1,6 @@
 "use client";
 
+import { FigureBioModal } from "@/components/ui/FigureBioModal";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { WalkPrompt } from "@/components/ui/WalkPrompt";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -19,6 +20,7 @@ export function GalleryChrome({ children }: { children: React.ReactNode }) {
         </div>
         <LanguageSwitcher />
         <WalkPrompt />
+        <FigureBioModal />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import { palette } from "@/lib/palette";
 import { getPlasterBump } from "@/scene/materials/surfaces";
 
 export type PlasterSurfaceProps = {
-  /** Wall paint. Light olive sage is #8a9a86. */
+  /** Wall paint. The airy olive is #a8b8a4. */
   color?: string;
   /** 0.85 keeps the olive matte, with just enough tooth to catch the spotlights. */
   roughness?: number;
@@ -24,7 +24,7 @@ export function PlasterSurface({ color = palette.plaster, roughness = 0.85 }: Pl
       roughness={roughness}
       metalness={0}
       bumpMap={bumpMap}
-      // A light grain, so #8a9a86 is not a flat fill under the spots.
+      // A light grain, so #a8b8a4 is not a flat fill under the spots.
       bumpScale={0.012}
     />
   );

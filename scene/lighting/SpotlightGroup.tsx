@@ -72,10 +72,14 @@ function ArtworkSpot({ placement }: { placement: ArtworkPlacement }) {
 /** Place the head in front of the painting, based on which way the frame faces. */
 function lampPosition(rotationY: number, x: number, z: number): [number, number, number] {
   const y = HALL.wallHeight - 0.55;
-  // Facing +Z: the far wall. The lamp steps into the room, toward +Z.
-  if (Math.abs(rotationY) < 0.2) return [x, y, z + STAND_OFF];
+  // Wrap to -PI..PI. The wing's near wall faces -Z (PI), not +X.
+  const yaw = Math.atan2(Math.sin(rotationY), Math.cos(rotationY));
+  // Facing +Z: a far wall. The lamp steps into the room, toward +Z.
+  if (Math.abs(yaw) < 0.2) return [x, y, z + STAND_OFF];
+  // Facing -Z: the wing's near wall. The lamp steps toward -Z.
+  if (yaw < -Math.PI + 0.2 || yaw > Math.PI - 0.2) return [x, y, z - STAND_OFF];
   // Facing +X: a west wall. The lamp steps toward +X.
-  if (rotationY > 0) return [x + STAND_OFF, y, z];
+  if (yaw > 0) return [x + STAND_OFF, y, z];
   // Facing -X: an east wall.
   return [x - STAND_OFF, y, z];
 }

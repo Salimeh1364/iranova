@@ -28,7 +28,7 @@ function finishTexture(canvas: HTMLCanvasElement, colorSpace: CanvasTextureType[
 }
 
 /**
- * Polished concrete. Base is #dcdad5, with a tighter speckle toward #c5c3bd.
+ * Pale stone. Base is #f0eee9, with a faint warmer speckle.
  * A canvas keeps the floor free of image files.
  */
 export function getConcreteTexture() {
@@ -39,7 +39,7 @@ export function getConcreteTexture() {
   canvas.height = SHEET;
   const context = requireContext(canvas, "Concrete");
 
-  // #dcdad5 light concrete. Specks stay near #c5c3bd so the slab reads as one floor.
+  // #f0eee9 pale stone. Specks stay close to that tone so the slab stays bright.
   context.fillStyle = palette.stone;
   context.fillRect(0, 0, SHEET, SHEET);
 
@@ -49,10 +49,10 @@ export function getConcreteTexture() {
     return (seed & 0xfffffff) / 0xfffffff;
   };
 
-  for (let index = 0; index < 2200; index += 1) {
-    const tone = 186 + Math.floor(random() * 30);
-    // Neutral grey speckle, slightly darker than #dcdad5.
-    context.fillStyle = `rgba(${tone}, ${tone}, ${tone - 2}, 0.22)`;
+  for (let index = 0; index < 1600; index += 1) {
+    const tone = 226 + Math.floor(random() * 18);
+    // A light warm grain, only a little deeper than #f0eee9.
+    context.fillStyle = `rgba(${tone}, ${tone - 1}, ${tone - 4}, 0.16)`;
     context.fillRect(random() * SHEET, random() * SHEET, 1 + random() * 2, 1 + random() * 2);
   }
 

@@ -22,4 +22,8 @@ export type Dictionary = {
     de: string;
     fa: string;
   };
+  figures: {
+    series: string;
+    close: string;
+  };
 };

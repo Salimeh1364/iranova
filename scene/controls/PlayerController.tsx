@@ -107,7 +107,8 @@ export function PlayerController() {
 
   return (
     <PointerLockControls
-      selector="#walk-start, .gallery-canvas"
+      // Only the walk button locks the pointer. A portrait click opens the biography.
+      selector="#walk-start"
       onLock={onLock}
       onUnlock={onUnlock}
     />

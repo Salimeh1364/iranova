@@ -8,7 +8,7 @@ export const fa: Dictionary = {
   gallery: {
     kicker: "هنر و فرهنگ ایران",
     title: "ایرانوا",
-    subtitle: "تالاری آرام برای آثاری که هنوز در راه‌اند.",
+    subtitle: "پرتره‌هایی از چهره‌های ایرانی در علم، هنر، سینما و موسیقی.",
     roomName: "اتاق نمایش",
     previewNote: "برای نگاه کردن در تالار کلیک کنید. با WASD یا کلیدهای جهت راه بروید.",
     walkStart: "برای راه رفتن کلیک کنید",
@@ -22,5 +22,9 @@ export const fa: Dictionary = {
     en: "English",
     de: "Deutsch",
     fa: "فارسی",
+  },
+  figures: {
+    series: "چهره‌های ایرانی",
+    close: "بستن",
   },
 };

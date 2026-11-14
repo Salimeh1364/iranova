@@ -2,11 +2,13 @@
 
 import { palette } from "@/lib/palette";
 import { HALL, PLAN } from "@/scene/hall";
+import { ExteriorSteps } from "@/scene/architecture/ExteriorSteps";
+import { GlassDoor } from "@/scene/architecture/GlassDoor";
 
 /**
- * Open rectangular portal in the +Z wall.
- * The casing is jambs and a head only. The floor line stays clear.
- * Three shallow steps rise from the courtyard to that open threshold.
+ * Rectangular entrance in the +Z wall.
+ * White jambs and a head, a clear glass pair, and steps outside.
+ * No sill. The gallery floor is the threshold.
  */
 
 // Clear opening, 4.4 m wide and 4.6 m tall.
@@ -26,24 +28,15 @@ const REVEAL = 0.015;
 // The molding is set 1 cm into that face so the back is buried in the plaster.
 const FACE = -HALL.wallThickness / 2 + 0.01;
 
-// Shallow public steps. Rise 14 cm, tread 46 cm, wider than the opening.
-const STEP_COUNT = 3;
-const STEP_RISE = 0.14;
-const STEP_TREAD = 0.46;
-const STEP_THICK = 0.07;
-const STEP_WIDTH = OPEN_W + 1.6;
-// Tucked slightly under the outer plaster so the top tread meets the floor.
-const STEP_START = HALL.wallThickness / 2 - 0.04;
-
 /** #f8fafc, roughness 0.72. Matte, so the relief reads in the daylight. */
 function Trim() {
   return <meshStandardMaterial color={palette.trim} roughness={0.72} metalness={0} />;
 }
 
-export function EntranceDoor() {
+export function EntrancePortal() {
   return (
     <group position={[0, 0, PLAN.spineNear]}>
-      {/* Olive lintel, #8a9a86, from the head of the opening up to the ceiling. */}
+      {/* Lintel in the wall color, from the head of the opening up to the ceiling. */}
       <mesh position={[0, (OPEN_H + HALL.wallHeight) / 2, 0]} receiveShadow>
         <boxGeometry args={[OPEN_W, HALL.wallHeight - OPEN_H, HALL.wallThickness]} />
         <meshStandardMaterial color={palette.plaster} roughness={0.85} metalness={0} />
@@ -51,8 +44,13 @@ export function EntranceDoor() {
 
       <Casing />
       <InnerLip />
-      {/* Outside the wall, in +Z. The opening above them stays empty. */}
-      <EntrySteps />
+      {/* Leaves sit in the wall plane. The opening above the floor stays clear. */}
+      <GlassDoor width={OPEN_W} height={OPEN_H} />
+      {/* Outside the wall, in +Z. The top tread tucks under the outer plaster. */}
+      <ExteriorSteps
+        width={OPEN_W + 1.6}
+        startZ={HALL.wallThickness / 2 - 0.04}
+      />
     </group>
   );
 }
@@ -90,39 +88,6 @@ function InnerLip() {
         position={[0, OPEN_H - REVEAL + LIP / 2, z]}
         size={[OPEN_W + LIP * 2, LIP, LIP_D]}
       />
-    </group>
-  );
-}
-
-/**
- * Three stone treads outside the portal.
- * The nearest is flush with the floor. Each one beyond it drops 14 cm.
- * Slabs stay thin so the edge facing the foyer reads as a step.
- */
-function EntrySteps() {
-  return (
-    <group>
-      {Array.from({ length: STEP_COUNT }, (_, index) => {
-        const top = -index * STEP_RISE;
-        const z = STEP_START + index * STEP_TREAD + STEP_TREAD / 2;
-        // Outer lip, a few centimeters proud, in a deeper stone so the nose catches light.
-        const noseZ = STEP_START + (index + 1) * STEP_TREAD - 0.025;
-
-        return (
-          <group key={index}>
-            <mesh position={[0, top - STEP_THICK / 2, z]} castShadow receiveShadow>
-              <boxGeometry args={[STEP_WIDTH, STEP_THICK, STEP_TREAD]} />
-              {/* #dcdad5, roughness 0.58. Pale stone, softer than the polished floor. */}
-              <meshStandardMaterial color={palette.stone} roughness={0.58} metalness={0.04} />
-            </mesh>
-            <mesh position={[0, top - 0.02, noseZ]} castShadow receiveShadow>
-              <boxGeometry args={[STEP_WIDTH + 0.02, 0.04, 0.05]} />
-              {/* #c5c3bd, the deeper stone, along the nosing. */}
-              <meshStandardMaterial color={palette.stoneDeep} roughness={0.72} metalness={0} />
-            </mesh>
-          </group>
-        );
-      })}
     </group>
   );
 }

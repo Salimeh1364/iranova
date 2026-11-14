@@ -1,13 +1,14 @@
 "use client";
 
 import { Suspense } from "react";
-import { artworks } from "@/content/artworks";
-import { ArtFrame } from "@/scene/artwork/ArtFrame";
+import { figurePlacements, figures } from "@/content/famousFigures";
+import { PortraitFrame } from "@/scene/artwork/PortraitFrame";
 import { Columns } from "@/scene/architecture/Columns";
-import { EntranceDoor } from "@/scene/architecture/EntranceDoor";
+import { EntrancePortal } from "@/scene/architecture/EntrancePortal";
 import { GalleryRooms } from "@/scene/architecture/GalleryRooms";
 import { GardenView } from "@/scene/architecture/GardenView";
 import { CeilingLights } from "@/scene/lighting/CeilingLights";
+import { SunShafts } from "@/scene/lighting/SunShafts";
 import { SpotlightGroup } from "@/scene/lighting/SpotlightGroup";
 
 /**
@@ -19,15 +20,16 @@ export function GalleryHall() {
     <group>
       <GalleryRooms />
       <Columns />
-      <EntranceDoor />
+      <EntrancePortal />
       {/* The photograph loads on its own, so the hall can draw first. */}
       <Suspense fallback={null}>
         <GardenView />
       </Suspense>
       <CeilingLights />
-      <SpotlightGroup placements={artworks} />
-      {artworks.map((placement) => (
-        <ArtFrame key={placement.id} placement={placement} />
+      <SunShafts />
+      <SpotlightGroup placements={figurePlacements} />
+      {figures.map((figure) => (
+        <PortraitFrame key={figure.id} figure={figure} />
       ))}
     </group>
   );
