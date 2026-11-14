@@ -32,4 +32,8 @@ export const de: Dictionary = {
   landmarks: {
     series: "Wahrzeichen Irans",
   },
+  audio: {
+    mute: "Klavier stummschalten",
+    unmute: "Klavier abspielen",
+  },
 };

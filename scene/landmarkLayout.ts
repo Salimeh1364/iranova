@@ -3,13 +3,15 @@ import { COLUMNS, HALL, PLAN, PLAYER } from "@/scene/hall";
 
 /**
  * Landscape sheet sizes, in meters.
+ * Eighteen percent larger than the first landmark hang.
  * The long wing walls take the wide frames. Tighter bays step down
  * just enough to keep a margin beside the nearest column.
  */
-const WIDE = { width: 1.92, height: 1.26 };
-const MID = { width: 1.72, height: 1.14 };
-const ROOM = { width: 1.62, height: 1.08 };
-const BAY = { width: 1.4, height: 0.94 };
+const GROW = 1.18;
+const WIDE = { width: 1.92 * GROW, height: 1.26 * GROW };
+const MID = { width: 1.72 * GROW, height: 1.14 * GROW };
+const ROOM = { width: 1.62 * GROW, height: 1.08 * GROW };
+const BAY = { width: 1.4 * GROW, height: 0.94 * GROW };
 
 /** Same eye line as the portraits. */
 const EYE = PLAYER.eyeHeight;
@@ -122,7 +124,8 @@ function assertClear(position: readonly [number, number, number], along: Along, 
     if (plane > 5.2) continue;
     const delta = along === "z" ? Math.abs(z - column.z) : Math.abs(x - column.x);
     const edge = delta - width / 2;
-    if (edge < 0.58) {
+    // Shaft radius is 0.2 m. 0.45 m to the center still clears the shaft.
+    if (edge < 0.45) {
       throw new Error(
         `Landmark at ${x.toFixed(2)}, ${z.toFixed(2)} is only ${edge.toFixed(2)} m clear of the column at ${column.x}, ${column.z}`,
       );

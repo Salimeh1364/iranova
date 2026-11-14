@@ -31,4 +31,8 @@ export const fa: Dictionary = {
   landmarks: {
     series: "نمادهای ایران",
   },
+  audio: {
+    mute: "بی‌صدا کردن پیانو",
+    unmute: "پخش پیانو",
+  },
 };

@@ -1,5 +1,6 @@
 "use client";
 
+import { AmbientAudioPlayer } from "@/components/ui/AmbientAudioPlayer";
 import { FigureBioModal } from "@/components/ui/FigureBioModal";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { WalkPrompt } from "@/components/ui/WalkPrompt";
@@ -18,7 +19,10 @@ export function GalleryChrome({ children }: { children: React.ReactNode }) {
           <h1 id="gallery-title">{messages.gallery.title}</h1>
           <p className="gallery-subtitle">{messages.gallery.subtitle}</p>
         </div>
-        <LanguageSwitcher />
+        <div className="gallery-nav">
+          <AmbientAudioPlayer />
+          <LanguageSwitcher />
+        </div>
         <WalkPrompt />
         <FigureBioModal />
       </div>

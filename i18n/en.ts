@@ -32,4 +32,8 @@ export const en: Dictionary = {
   landmarks: {
     series: "Landmarks of Iran",
   },
+  audio: {
+    mute: "Mute piano",
+    unmute: "Play piano",
+  },
 };

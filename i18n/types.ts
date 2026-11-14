@@ -30,4 +30,8 @@ export type Dictionary = {
   landmarks: {
     series: string;
   };
+  audio: {
+    mute: string;
+    unmute: string;
+  };
 };

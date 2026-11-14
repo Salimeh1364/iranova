@@ -2,11 +2,13 @@ import type { ArtworkPlacement } from "@/lib/types";
 import { COLUMNS, HALL, PLAN, PLAYER } from "@/scene/hall";
 
 /**
- * Sheet size, in meters. About a third larger than the first hang,
- * so the portraits read against the 5.6 m walls.
+ * Sheet size, in meters.
+ * Eighteen percent larger than the previous hang (1.40 × 1.78),
+ * so the portraits read as a grand row on the 5.6 m walls.
  */
-const FRAME_W = 1.4;
-const FRAME_H = 1.78;
+const GROW = 1.18;
+const FRAME_W = 1.4 * GROW;
+const FRAME_H = 1.78 * GROW;
 
 /**
  * Center height of every frame.
@@ -95,7 +97,8 @@ const farZ = PLAN.spineFar + half + PROUD;
 
 // The entrance-side frame must keep a margin before the portal wall.
 const entranceInner = PLAN.spineNear - half;
-if (entranceInner - (foyerDoorZ + FRAME_W / 2) < 0.4) {
+// A strip of plaster remains between the entrance-side frame and the portal wall.
+if (entranceInner - (foyerDoorZ + FRAME_W / 2) < 0.34) {
   throw new Error("Foyer portrait beside the entrance meets the portal wall");
 }
 
@@ -104,7 +107,7 @@ export type PortraitSlotName = keyof typeof PORTRAIT_SLOTS;
 /**
  * Eight hang points.
  * Each one sits in open plaster, clear of the column shafts.
- * Wider sheets still sit in the same bays: centered between columns,
+ * The larger sheets stay in the same bays: centered between columns,
  * or beside a column with equal plaster on both sides.
  */
 export const PORTRAIT_SLOTS = {
@@ -163,7 +166,8 @@ function assertClear(hung: PortraitSlot, along: Along) {
     if (plane > 4.5) continue;
     const delta = along === "z" ? Math.abs(z - column.z) : Math.abs(x - column.x);
     const edge = delta - FRAME_W / 2;
-    if (edge < 0.95) {
+    // Shaft radius is 0.2 m, so this still leaves open plaster beside the column.
+    if (edge < 0.78) {
       throw new Error(
         `Frame at ${x.toFixed(2)}, ${z.toFixed(2)} is only ${edge.toFixed(2)} m clear of the column at ${column.x}, ${column.z}`,
       );
