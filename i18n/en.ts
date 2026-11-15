@@ -14,6 +14,8 @@ export const en: Dictionary = {
     previewNote: "Click the hall to look around. Walk with WASD or the arrow keys.",
     walkStart: "Click to walk",
     walkHint: "Look with the mouse. Esc releases the cursor.",
+    touchHint: "Drag to look. The pad walks. Tap a frame.",
+    touchPad: "Walk pad",
     loading: "Preparing the gallery…",
     unavailable:
       "This browser cannot show the 3D gallery. The rooms are light olive, linked by wide doorways, with off-white columns and a white rectangular entrance.",

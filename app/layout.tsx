@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Outfit, Vazirmatn } from "next/font/google";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { en } from "@/i18n/en";
@@ -28,6 +28,12 @@ const persian = Vazirmatn({
 export const metadata: Metadata = {
   title: en.meta.title,
   description: en.meta.description,
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

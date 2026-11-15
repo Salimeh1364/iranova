@@ -13,6 +13,8 @@ export type Dictionary = {
     previewNote: string;
     walkStart: string;
     walkHint: string;
+    touchHint: string;
+    touchPad: string;
     loading: string;
     unavailable: string;
   };

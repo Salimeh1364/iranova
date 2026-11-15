@@ -1,8 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useSyncExternalStore } from "react";
 import { Shape, ShapeGeometry, DoubleSide } from "three";
 import { MeshReflectorMaterial } from "@react-three/drei";
+import { getDeviceProfile, getServerDeviceProfile, subscribeDeviceProfile } from "@/lib/deviceProfile";
 import { palette } from "@/lib/palette";
 import { HALL, PLAN } from "@/scene/hall";
 import { GalleryWalls } from "@/scene/architecture/GalleryWalls";
@@ -17,25 +18,31 @@ const H = HALL.wallHeight;
 export function GalleryRooms() {
   const plan = useMemo(() => createPlanGeometry(), []);
   const stone = useMemo(() => getConcreteTexture(), []);
+  const profile = useSyncExternalStore(subscribeDeviceProfile, getDeviceProfile, getServerDeviceProfile);
 
   return (
     <group>
       {/* #f0eee9. Satin, not a mirror: roughness 0.5 and a weak blurred reflection. */}
       <mesh geometry={plan} receiveShadow>
-        <MeshReflectorMaterial
-          map={stone}
-          color={palette.stone}
-          roughness={0.5}
-          metalness={0.04}
-          mirror={0}
-          resolution={128}
-          blur={[120, 40]}
-          mixBlur={0.7}
-          mixStrength={0.12}
-          depthScale={0.25}
-          minDepthThreshold={0.4}
-          maxDepthThreshold={1.2}
-        />
+        {profile.reflector > 0 ? (
+          <MeshReflectorMaterial
+            map={stone}
+            color={palette.stone}
+            roughness={0.5}
+            metalness={0.04}
+            mirror={0}
+            resolution={profile.reflector}
+            blur={[120, 40]}
+            mixBlur={0.7}
+            mixStrength={0.12}
+            depthScale={0.25}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.2}
+          />
+        ) : (
+          // A phone skips the extra floor pass and keeps the same stone color.
+          <meshStandardMaterial map={stone} color={palette.stone} roughness={0.62} metalness={0.04} />
+        )}
       </mesh>
 
       {/* Off-white ceiling, #f8fafc, roughness 0.9. Double-sided so the soffit is visible from below. */}

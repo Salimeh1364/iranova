@@ -14,6 +14,8 @@ export const de: Dictionary = {
     previewNote: "Klicken Sie in die Halle, um sich umzusehen. Gehen mit WASD oder den Pfeiltasten.",
     walkStart: "Klicken zum Gehen",
     walkHint: "Mit der Maus umsehen. Esc gibt den Zeiger frei.",
+    touchHint: "Ziehen zum Schauen. Das Pad geht. Ein Bild antippen.",
+    touchPad: "Gehfeld",
     loading: "Die Galerie wird vorbereitet…",
     unavailable:
       "Dieser Browser kann die 3D-Galerie nicht darstellen. Die Räume sind helloliv, durch weite Durchgänge verbunden, mit weißen Säulen und einem weißen rechteckigen Eingang.",

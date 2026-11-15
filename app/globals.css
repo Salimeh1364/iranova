@@ -61,6 +61,7 @@ button {
   display: block;
   width: 100%;
   height: 100%;
+  touch-action: none;
 }
 
 .gallery-status {
@@ -245,6 +246,73 @@ h1 {
   outline-offset: 3px;
 }
 
+.touch-steer {
+  position: absolute;
+  z-index: 12;
+  inset-inline-start: max(1rem, env(safe-area-inset-inline-start, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  pointer-events: none;
+}
+
+.touch-hint {
+  max-width: 11rem;
+  margin: 0;
+  color: #fff;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(24, 32, 28, 0.4);
+}
+
+.touch-stick {
+  position: relative;
+  width: 6.75rem;
+  height: 6.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.touch-knob {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.35rem;
+  height: 2.35rem;
+  margin: -1.175rem 0 0 -1.175rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+}
+
+.heading-compass {
+  position: absolute;
+  z-index: 12;
+  inset-inline-end: max(1rem, env(safe-area-inset-inline-end, 0px));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(24, 32, 28, 0.55);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.heading-compass span {
+  display: block;
+}
+
 .figure-scrim {
   position: absolute;
   inset: 0;
@@ -370,20 +438,76 @@ html[dir="rtl"] .figure-bio {
   letter-spacing: 0;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 768px) {
   .gallery-title-block {
-    top: 16px;
-    inset-inline-start: 16px;
-    max-width: calc(100vw - 150px);
+    top: max(12px, env(safe-area-inset-top));
+    inset-inline-start: max(12px, env(safe-area-inset-inline-start, 0px));
+    /* Leave the audio button and EN / DE / FA clear of the title. */
+    max-width: calc(100vw - 13.25rem - env(safe-area-inset-left) - env(safe-area-inset-right));
   }
 
   .gallery-nav {
-    top: 16px;
-    inset-inline-end: 16px;
+    top: max(12px, env(safe-area-inset-top));
+    inset-inline-end: max(12px, env(safe-area-inset-inline-end, 0px));
+    gap: 0.35rem;
+  }
+
+  .gallery-kicker {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
   }
 
   h1 {
-    font-size: 2.2rem;
+    font-size: 1.7rem;
+  }
+
+  .gallery-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .audio-toggle {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .language-switcher button {
+    min-width: 2.05rem;
+    min-height: 1.85rem;
+    padding: 0.22rem 0.4rem;
+    letter-spacing: 0.06em;
+  }
+
+  .walk-prompt {
+    width: min(18rem, calc(100vw - 2rem));
+    min-width: 0;
+    padding: 0.8rem 1rem;
+  }
+
+  .figure-scrim {
+    padding:
+      max(4.4rem, calc(env(safe-area-inset-top) + 3.4rem))
+      max(0.75rem, env(safe-area-inset-right))
+      max(0.75rem, env(safe-area-inset-bottom))
+      max(0.75rem, env(safe-area-inset-left));
+  }
+
+  .figure-panel {
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  .figure-panel h2 {
+    font-size: 1.45rem;
+  }
+
+  .figure-panel img,
+  .figure-panel img.landscape {
+    max-height: 34vh;
+  }
+
+  .figure-bio {
+    font-size: 0.95rem;
   }
 }
 

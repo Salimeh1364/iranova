@@ -2,6 +2,7 @@
 
 import { useSyncExternalStore } from "react";
 import { useI18n } from "@/i18n/I18nProvider";
+import { getDeviceProfile, getServerDeviceProfile, subscribeDeviceProfile } from "@/lib/deviceProfile";
 import { getWalkLocked, subscribeWalkLock } from "@/scene/controls/walkSession";
 
 /**
@@ -11,14 +12,17 @@ import { getWalkLocked, subscribeWalkLock } from "@/scene/controls/walkSession";
 export function WalkPrompt() {
   const { messages } = useI18n();
   const locked = useSyncExternalStore(subscribeWalkLock, getWalkLocked, () => false);
+  const profile = useSyncExternalStore(subscribeDeviceProfile, getDeviceProfile, getServerDeviceProfile);
+  // A phone never locks the pointer. The pad replaces this button, which stays mounted for the desktop listener.
+  const hidden = locked || profile.touch;
 
   return (
     <button
       id="walk-start"
       type="button"
-      className={locked ? "walk-prompt is-hidden" : "walk-prompt"}
-      aria-hidden={locked}
-      tabIndex={locked ? -1 : 0}
+      className={hidden ? "walk-prompt is-hidden" : "walk-prompt"}
+      aria-hidden={hidden}
+      tabIndex={hidden ? -1 : 0}
       suppressHydrationWarning
     >
       <strong>{messages.gallery.walkStart}</strong>

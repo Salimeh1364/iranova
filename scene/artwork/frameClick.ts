@@ -5,6 +5,8 @@ import type { ThreeEvent } from "@react-three/fiber";
 
 // A look-around drag longer than this, in pixels, is not a click.
 const DRAG_PX = 8;
+// A fingertip jitters more than a mouse, so a tap still opens the frame.
+const TOUCH_PX = 18;
 
 /**
  * Pointer handlers for the photograph and the nameplate only.
@@ -14,12 +16,14 @@ export function useArtworkClick(onSelect: () => void) {
   const origin = useRef<{ x: number; y: number } | null>(null);
   const moved = useRef(0);
   const dragged = useRef(false);
+  const limit = useRef(DRAG_PX);
 
   const onPointerDown = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
     origin.current = { x: event.nativeEvent.clientX, y: event.nativeEvent.clientY };
     moved.current = 0;
     dragged.current = false;
+    limit.current = event.nativeEvent.pointerType === "touch" ? TOUCH_PX : DRAG_PX;
   };
 
   const onPointerMove = (event: ThreeEvent<PointerEvent>) => {
@@ -30,7 +34,7 @@ export function useArtworkClick(onSelect: () => void) {
     const dy = event.nativeEvent.clientY - start.y;
     // Pointer lock reports the look through movement, not a new cursor position.
     moved.current += Math.hypot(event.nativeEvent.movementX, event.nativeEvent.movementY);
-    if (moved.current > DRAG_PX || dx * dx + dy * dy > DRAG_PX * DRAG_PX) {
+    if (moved.current > limit.current || dx * dx + dy * dy > limit.current * limit.current) {
       dragged.current = true;
     }
   };

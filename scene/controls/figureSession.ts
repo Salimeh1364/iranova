@@ -1,3 +1,5 @@
+import { clearStick } from "@/scene/controls/touchSteer";
+
 type Listener = () => void;
 
 export type ExhibitSelection = { kind: "figure" | "landmark"; id: string } | null;
@@ -10,6 +12,8 @@ function publish(next: ExhibitSelection) {
   selected = next;
   // Leave walking mode so the panel can be read with the cursor.
   if (next && document.pointerLockElement) document.exitPointerLock();
+  // A held walk pad must not keep moving under the open card.
+  if (next) clearStick();
   listeners.forEach((listener) => listener());
 }
 
