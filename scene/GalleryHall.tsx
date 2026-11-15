@@ -5,6 +5,7 @@ import { figurePlacements, figures } from "@/content/famousFigures";
 import { landmarkPlacements, landmarks } from "@/content/iranLandmarks";
 import { LandmarkFrame } from "@/scene/artwork/LandmarkFrame";
 import { PortraitFrame } from "@/scene/artwork/PortraitFrame";
+import { WallVerse } from "@/scene/artwork/WallVerse";
 import { Columns } from "@/scene/architecture/Columns";
 import { EntrancePortal } from "@/scene/architecture/EntrancePortal";
 import { GalleryRooms } from "@/scene/architecture/GalleryRooms";
@@ -23,6 +24,8 @@ export function GalleryHall() {
       <GalleryRooms />
       <Columns />
       <EntrancePortal />
+      {/* The poem on the two walls of the passage, facing the entrance. */}
+      <WallVerse />
       {/* The photograph loads on its own, so the hall can draw first. */}
       <Suspense fallback={null}>
         <GardenView />

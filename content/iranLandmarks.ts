@@ -20,6 +20,11 @@ export type IranLandmark = {
   credit: string;
   placement: ArtworkPlacement;
   copy: Record<Locale, LandmarkCopy>;
+  /**
+   * Vertical crop for a tall photograph in the wide frame.
+   * 0 keeps the top, 1 the bottom. Omitted means a centered crop.
+   */
+  coverBias?: number;
 };
 
 type LandmarkSeed = {
@@ -28,12 +33,13 @@ type LandmarkSeed = {
   seed: number;
   credit: string;
   copy: Record<Locale, LandmarkCopy>;
+  coverBias?: number;
 };
 
 const LANDMARKS: readonly LandmarkSeed[] = [
   {
     id: "naqsh",
-    slot: "wingFarEast",
+    slot: "wingWestNorth",
     seed: 71,
     credit: "Amir Pashaei, CC BY-SA 4.0",
     copy: {
@@ -61,7 +67,8 @@ const LANDMARKS: readonly LandmarkSeed[] = [
     id: "persepolis",
     slot: "wingFarWest",
     seed: 83,
-    credit: "Diego Delso, CC BY-SA 4.0",
+    // The standing columns of the Apadana, seen across the terrace.
+    credit: "Carole Raddato, CC BY-SA 2.0",
     copy: {
       en: {
         title: "Persepolis",
@@ -136,54 +143,83 @@ const LANDMARKS: readonly LandmarkSeed[] = [
     },
   },
   {
-    id: "badab",
-    slot: "wingWest",
-    seed: 121,
-    credit: "Amir Ali Razzaghi, CC BY 4.0",
+    id: "monarjonban",
+    slot: "wingWestCenter",
+    seed: 147,
+    credit: "Ahmad Masoominezhad, CC BY-SA 4.0",
     copy: {
       en: {
-        title: "Badab-e Surt",
-        place: "Mazandaran",
+        title: "Monar Jonban",
+        place: "Isfahan",
         description:
-          "Badab-e Surt is a pair of stepped travertine springs in the mountains of Mazandaran. Mineral water has laid down orange and white terraces over thousands of years, one spring salty and one sour. The site is a natural formation, not a building, and it is protected for that geology.",
+          "Monar Jonban, the Shaking Minarets, stands west of Isfahan over the tomb of the Sufi Amu Abdullah, who died in 1316. The porch is Ilkhanid brick. Two minarets were added in the Safavid period, and they are bonded into that one light structure: when a guide sets one minaret swaying, the other moves with it.",
       },
       de: {
-        title: "Badab-e Surt",
-        place: "Mazandaran",
+        title: "Monar Jonban",
+        place: "Isfahan",
         description:
-          "Badab-e Surt ist ein Paar gestufter Travertinquellen in den Bergen von Mazandaran. Mineralwasser hat über Jahrtausende orange und weiße Terrassen abgelagert, eine Quelle salzig, die andere sauer. Der Ort ist eine natürliche Bildung, kein Bau, und steht wegen dieser Geologie unter Schutz.",
+          "Monar Jonban, die wackelnden Minarette, steht westlich von Isfahan über dem Grab des Sufis Amu Abdullah, der 1316 starb. Die Vorhalle ist ilkhanidisches Ziegelwerk. Zwei Minarette kamen in der Safawidenzeit hinzu und sind in dieses eine leichte Gefüge eingebunden: setzt ein Führer ein Minarett in Schwingung, bewegt sich das andere mit.",
       },
       fa: {
-        title: "باداب سورت",
-        place: "مازندران",
+        title: "منارجنبان",
+        place: "اصفهان",
         description:
-          "باداب سورت یک جفت چشمهٔ پلکانی تراورتن در کوه‌های مازندران است. آب معدنی در هزاران سال تراس‌های نارنجی و سفید را نشانده است؛ یک چشمه شور و دیگری ترش. این جا سازه‌ای ساختهٔ انسان نیست و برای همین زمین‌شناسی حفاظت می‌شود.",
+          "منارجنبان در غرب اصفهان بر آرامگاه عمو عبدالله، عارف ایلخانی که در سال ۱۳۱۶ میلادی درگذشت، ایستاده است. ایوان از آجر دورهٔ ایلخانی است. دو مناره در دورهٔ صفوی به آن افزوده شد و در همین سازهٔ سبک به هم پیوسته‌اند: وقتی راهنما یکی را می‌لرزاند، دیگری هم با آن تکان می‌خورد.",
       },
     },
   },
   {
-    id: "lut",
-    slot: "galleryWest",
-    seed: 133,
-    credit: "Ninara, CC BY 2.0",
+    // South end of the west wall, the same hang the bridge used.
+    id: "sheikhbahai",
+    slot: "wingWest",
+    seed: 151,
+    credit: "Mrezazadehkhadem, CC BY-SA 4.0",
+    // The entrance photograph is tall. A higher bias keeps the tiled panel in the wide opening.
+    coverBias: 0.68,
     copy: {
       en: {
-        title: "Lut Desert",
-        place: "Kerman, Sistan and Baluchestan, South Khorasan",
+        title: "Sheikh Bahai Bathhouse",
+        place: "Isfahan",
         description:
-          "The Lut Desert, Dasht-e Lut, covers a vast basin in southeastern Iran. Wind has carved the yardangs, long ridges of clay and sand, and the surface has recorded some of the highest ground temperatures measured on Earth. UNESCO inscribed the desert in 2016 for that extreme landscape.",
+          "Sheikh Bahai Bathhouse stands in Isfahan and is tied to Sheikh Bahai, the Safavid polymath at the court of Shah Abbas. Its fame is an architectural legend: a single candle, set beneath the water reservoir, was said to heat the whole bath. In a later repair the chamber was opened, the flame went out, and the secret of that candle was lost.",
       },
       de: {
-        title: "Lut-Wüste",
-        place: "Kerman, Sistan und Belutschistan, Süd-Chorasan",
+        title: "Scheich-Bahai-Badehaus",
+        place: "Isfahan",
         description:
-          "Die Lut-Wüste, Dascht-e Lut, bedeckt ein weites Becken im Südosten Irans. Wind hat die Yardangs geschnitten, lange Rücken aus Ton und Sand, und die Oberfläche hat einige der höchsten am Boden gemessenen Temperaturen der Erde verzeichnet. Die UNESCO nahm die Wüste 2016 wegen dieser extremen Landschaft auf.",
+          "Das Scheich-Bahai-Badehaus steht in Isfahan und wird mit Scheich Bahai verbunden, dem Universalgelehrten der Safawiden am Hof Schah Abbas’. Berühmt ist eine Baulegende: eine einzige Kerze unter dem Wasserbecken soll das ganze Bad gewärmt haben. Bei einer späteren Reparatur wurde die Kammer geöffnet, die Flamme erlosch, und das Geheimnis dieser Kerze ging verloren.",
       },
       fa: {
-        title: "دشت لوت",
-        place: "کرمان، سیستان و بلوچستان، خراسان جنوبی",
+        title: "حمام شیخ بهایی",
+        place: "اصفهان",
         description:
-          "دشت لوت حوضهٔ گسترده‌ای در جنوب شرقی ایران است. باد کلوت‌ها را تراشیده، پشته‌های بلند از رس و ماسه، و سطح آن برخی از بالاترین دمای اندازه‌گیری‌شده روی زمین را ثبت کرده است. یونسکو این بیابان را در سال ۲۰۱۶ برای همین چشم‌اندازِ حدی ثبت کرد.",
+          "حمام شیخ بهایی در اصفهان به شیخ بهایی، علامهٔ عصر صفوی و از نزدیکان شاه عباس، نسبت دارد. شهرت بنا در این افسانه است که یک شمع، زیر مخزن آب، گرمای همهٔ حمام را تأمین می‌کرد. در تعمیری بعدی آن اتاقک را گشودند، شعله خاموش شد و راز شمع از میان رفت.",
+      },
+    },
+  },
+  {
+    id: "pasargadae",
+    slot: "wingFarEast",
+    seed: 133,
+    credit: "Diego Delso, CC BY-SA 4.0",
+    copy: {
+      en: {
+        title: "Tomb of Cyrus",
+        place: "Pasargadae, Fars",
+        description:
+          "The Tomb of Cyrus stands at Pasargadae, the first capital of the Achaemenid empire, on the plain of Fars. Cyrus the Great was buried here in the sixth century BCE. A chamber of pale stone sits on a stepped plinth, and the ground around it holds the remains of palaces and gardens, now a UNESCO World Heritage site.",
+      },
+      de: {
+        title: "Grabmal von Kyros",
+        place: "Pasargadae, Fars",
+        description:
+          "Das Grabmal von Kyros steht in Pasargadae, der ersten Hauptstadt des Achämenidenreichs, in der Ebene von Fars. Kyros der Große wurde hier im sechsten Jahrhundert vor unserer Zeit bestattet. Eine Kammer aus hellem Stein ruht auf einem gestuften Sockel, und ringsum liegen die Reste von Palästen und Gärten, heute ein UNESCO-Welterbe.",
+      },
+      fa: {
+        title: "آرامگاه کوروش",
+        place: "پاسارگاد، فارس",
+        description:
+          "آرامگاه کوروش در پاسارگاد است، نخستین پایتخت هخامنشیان، در دشت فارس. کوروش بزرگ در سدهٔ ششم پیش از میلاد اینجا به خاک سپرده شد. اتاقکی از سنگ روشن بر سکویی پلکانی نشسته و پیرامونش بازماندهٔ کاخ‌ها و باغ‌هاست که امروز در فهرست میراث جهانی یونسکو است.",
       },
     },
   },
@@ -195,6 +231,7 @@ export const landmarks: readonly IranLandmark[] = LANDMARKS.map((item) => ({
   credit: item.credit,
   placement: landmarkPlacement(item.id, item.slot, item.seed),
   copy: item.copy,
+  coverBias: item.coverBias,
 }));
 
 /** Placements for the picture lights. One lamp per landmark. */

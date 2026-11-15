@@ -87,6 +87,7 @@ export function AmbientAudioPlayer() {
       className="audio-toggle"
       aria-pressed={muted}
       aria-label={muted ? messages.audio.unmute : messages.audio.mute}
+      suppressHydrationWarning
       onClick={onToggle}
     >
       {muted ? <SpeakerOffIcon /> : <SpeakerIcon />}

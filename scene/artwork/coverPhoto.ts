@@ -2,8 +2,8 @@ import { ClampToEdgeWrapping, Texture } from "three";
 
 /**
  * Crop a photograph the way CSS `object-fit: cover` does.
- * `biasY` is 0 at the top of the picture and 1 at the bottom.
- * Portraits use a low bias so the face stays in the opening.
+ * `biasY` is 0 at the bottom of the picture and 1 at the top.
+ * Portraits use a low bias. Their opening already fits the face, so the shift stays small.
  */
 export function applyCover(texture: Texture, viewAspect: number, biasY = 0.5) {
   const image = texture.image as { width?: number; height?: number } | undefined;
@@ -24,7 +24,7 @@ export function applyCover(texture: Texture, viewAspect: number, biasY = 0.5) {
   }
 
   // Taller than the opening: crop top and bottom.
-  // With Three's default flipY, a small offset keeps the top of the picture.
+  // A larger offset moves the window up the picture.
   const repeatY = imageAspect / viewAspect;
   texture.repeat.y = repeatY;
   texture.offset.y = (1 - repeatY) * biasY;

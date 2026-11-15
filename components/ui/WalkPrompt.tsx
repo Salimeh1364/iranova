@@ -19,6 +19,7 @@ export function WalkPrompt() {
       className={locked ? "walk-prompt is-hidden" : "walk-prompt"}
       aria-hidden={locked}
       tabIndex={locked ? -1 : 0}
+      suppressHydrationWarning
     >
       <strong>{messages.gallery.walkStart}</strong>
       <span>{messages.gallery.walkHint}</span>

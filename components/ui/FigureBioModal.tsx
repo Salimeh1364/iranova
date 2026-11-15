@@ -8,8 +8,9 @@ import { placeholderDataUrl } from "@/scene/artwork/portraitPlaceholder";
 import { getSelectedExhibit, selectFigure, subscribeFigure } from "@/scene/controls/figureSession";
 
 /**
- * Side panel for the frame that was clicked.
- * Copy follows the active language. A missing photograph uses the painted stand-in.
+ * Frosted card for the frame that was clicked, figures and landmarks alike.
+ * The glass matches the walk prompt. Copy follows the active language.
+ * A missing photograph uses the painted stand-in.
  */
 export function FigureBioModal() {
   const { locale, messages } = useI18n();
@@ -48,21 +49,24 @@ export function FigureBioModal() {
         <button type="button" className="figure-close" onClick={() => selectFigure(null)}>
           {messages.figures.close}
         </button>
-        <p className="figure-kicker">{kicker}</p>
         <ExhibitPhoto
           src={open.image}
           seed={open.placement.seed}
           name={title}
           landscape={Boolean(landmark)}
         />
-        <h2 id="figure-name">{title}</h2>
-        <p className="figure-meta">{meta}</p>
-        <p className="figure-bio">{body}</p>
-        {credit ? (
-          <p className="figure-credit">
-            {messages.figures.photo} {credit}
-          </p>
-        ) : null}
+        {/* Denser plate than the glass, so the biography stays sharp on the gallery. */}
+        <div className="figure-copy">
+          <p className="figure-kicker">{kicker}</p>
+          <h2 id="figure-name">{title}</h2>
+          <p className="figure-meta">{meta}</p>
+          <p className="figure-bio">{body}</p>
+          {credit ? (
+            <p className="figure-credit">
+              {messages.figures.photo} {credit}
+            </p>
+          ) : null}
+        </div>
       </aside>
     </div>
   );

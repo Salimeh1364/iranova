@@ -32,8 +32,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${display.variable} ${sans.variable} ${persian.variable}`}>
-      <body>
+    <html
+      lang="en"
+      className={`${display.variable} ${sans.variable} ${persian.variable}`}
+      // Extensions stamp attributes onto the document before React hydrates.
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
         <I18nProvider>{children}</I18nProvider>
       </body>
     </html>

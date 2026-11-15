@@ -15,9 +15,16 @@ export function GalleryChrome({ children }: { children: React.ReactNode }) {
       {/* Floats above the canvas. The stage itself has no solid bar, so the hall fills the viewport. */}
       <div className="gallery-overlay">
         <div className="gallery-title-block">
-          <p className="gallery-kicker">{messages.gallery.kicker}</p>
-          <h1 id="gallery-title">{messages.gallery.title}</h1>
-          <p className="gallery-subtitle">{messages.gallery.subtitle}</p>
+          {/* Preview tools add attributes to these nodes before hydration. */}
+          <p className="gallery-kicker" suppressHydrationWarning>
+            {messages.gallery.kicker}
+          </p>
+          <h1 id="gallery-title" suppressHydrationWarning>
+            {messages.gallery.title}
+          </h1>
+          <p className="gallery-subtitle" suppressHydrationWarning>
+            {messages.gallery.subtitle}
+          </p>
         </div>
         <div className="gallery-nav">
           <AmbientAudioPlayer />

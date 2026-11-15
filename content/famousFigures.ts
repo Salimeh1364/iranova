@@ -25,7 +25,7 @@ export type FamousFigure = {
 };
 
 /**
- * Eight figures across science, art, cinema, and music.
+ * Eight figures across science, art, cinema, poetry, and music.
  * Hang points live in portraitLayout: one eye height, clear of the columns.
  */
 export const figures: readonly FamousFigure[] = [
@@ -233,30 +233,31 @@ export const figures: readonly FamousFigure[] = [
     },
   },
   {
-    id: "farmanfarmaian",
-    image: "/images/figures/farmanfarmaian.jpg",
-    placement: portraitPlacement("farmanfarmaian", "galleryEastFar", 59),
+    id: "moshiri",
+    image: "/images/figures/moshiri.jpg",
+    credit: "Mohammad Goljamjou, CC BY 4.0",
+    placement: portraitPlacement("moshiri", "galleryEastFar", 59),
     copy: {
       en: {
-        name: "Monir Shahroudy Farmanfarmaian",
-        field: "Visual art",
-        years: "1922–2019",
+        name: "Fereydoon Moshiri",
+        field: "Poetry",
+        years: "1926–2000",
         biography:
-          "Monir Shahroudy Farmanfarmaian spent a lifetime joining Iranian mirror mosaic, aineh-kari, to the language of modern abstraction. After years in New York she returned to the geometries of shrine interiors and remade them as mirrored sculptures and reliefs. Museums, including the Guggenheim, have given retrospectives to a body of work that treats reflection itself as a material.",
+          "Fereydoon Moshiri was a poet of modern Iran, born in Tehran. His clear, lyrical poems, above all “The Alley,” reached readers far beyond literary circles. He worked for years in journalism and at Radio Iran, and the collections that began with Thirst for the Storm made him one of the most widely read poets of his century.",
       },
       de: {
-        name: "Monir Shahroudy Farmanfarmaian",
-        field: "Bildende Kunst",
-        years: "1922–2019",
+        name: "Fereydoon Moshiri",
+        field: "Lyrik",
+        years: "1926–2000",
         biography:
-          "Monir Shahroudy Farmanfarmaian verband ein Leben lang das iranische Spiegelmosaik, Aineh-Kari, mit der Sprache der modernen Abstraktion. Nach Jahren in New York kehrte sie zu den Geometrien der Schreininnenräume zurück und formte sie zu verspiegelten Skulpturen und Reliefs. Museen, darunter das Guggenheim, widmeten einem Werk Retrospektiven, das den Spiegel selbst zum Material macht.",
+          "Fereydoon Moshiri war ein Dichter der iranischen Moderne, geboren in Teheran. Seine klaren, lyrischen Gedichte, vor allem „Die Gasse“, erreichten Leser weit über literarische Kreise hinaus. Er arbeitete jahrelang als Journalist und beim Radio Iran, und die Bände, die mit Durst nach dem Sturm begannen, machten ihn zu einem der meistgelesenen Dichter seines Jahrhunderts.",
       },
       fa: {
-        name: "منیر شاهرودی فرمانفرماییان",
-        field: "هنرهای تجسمی",
-        years: "۱۹۲۲–۲۰۱۹",
+        name: "فریدون مشیری",
+        field: "شعر",
+        years: "۱۹۲۶–۲۰۰۰",
         biography:
-          "منیر شاهرودی فرمانفرماییان عمری آیینه‌کاری ایرانی را با زبان انتزاع مدرن به هم دوخت. پس از سال‌ها در نیویورک به هندسهٔ درون بقعه‌ها بازگشت و آن را به مجسمه‌ها و نقش‌برجسته‌های آیینه‌ای بدل کرد. موزه‌ها، از جمله گوگنهایم، به مجموعه‌ای مرور کردند که خود بازتاب را مادهٔ کار می‌داند.",
+          "فریدون مشیری شاعر شعر نو ایران بود و در تهران زاده شد. شعرهای روشن و تغزلی او، به‌ویژه «کوچه»، به خوانندگانی بسیار فراتر از حلقه‌های ادبی رسید. سال‌ها در روزنامه‌نگاری و رادیو ایران کار کرد و مجموعه‌هایی که با «تشنهٔ توفان» آغاز شد او را از پرمخاطب‌ترین شاعران سدهٔ خود کرد.",
       },
     },
   },

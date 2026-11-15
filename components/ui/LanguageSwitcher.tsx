@@ -21,6 +21,7 @@ export function LanguageSwitcher() {
           lang={option.locale}
           aria-label={messages.language[option.locale]}
           aria-pressed={locale === option.locale}
+          suppressHydrationWarning
           onClick={() => setLocale(option.locale)}
         >
           {option.code}
