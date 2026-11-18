@@ -1,4 +1,5 @@
-import { COLUMNS, COLUMN, PASSAGES, PLAYER, ROOMS } from "@/scene/hall";
+import { COLUMNS, COLUMN, HALL, PASSAGES, PLAN, PLAYER, ROOMS } from "@/scene/hall";
+import { TERRACE, stepsEndZ } from "@/scene/architecture/terracePlan";
 
 /** A floor rectangle. Y is ignored: the visitor stays at eye height. */
 export type Aabb = {
@@ -43,7 +44,24 @@ function passageBox(passage: (typeof PASSAGES)[number]): Aabb {
   };
 }
 
-const WALKABLE: readonly Aabb[] = [...ROOMS.map(insetRoom), ...PASSAGES.map(passageBox)];
+const WALKABLE: readonly Aabb[] = [
+  ...ROOMS.map(insetRoom),
+  ...PASSAGES.map(passageBox),
+  // Throat of the garden doors, overlapping the foyer so the body can cross the threshold.
+  {
+    minX: -PLAN.entranceHalf + radius,
+    maxX: PLAN.entranceHalf - radius,
+    minZ: PLAN.spineNear - HALL.wallThickness / 2 - radius - 0.08,
+    maxZ: TERRACE.landingZ + 0.4,
+  },
+  // Landing and steps. Wider than the opening, and short of the garden photograph.
+  {
+    minX: -TERRACE.halfWidth + radius,
+    maxX: TERRACE.halfWidth - radius,
+    minZ: TERRACE.landingZ - 0.05,
+    maxZ: stepsEndZ() - 0.06,
+  },
+];
 
 function contains(x: number, z: number, box: Aabb) {
   return x >= box.minX && x <= box.maxX && z >= box.minZ && z <= box.maxZ;

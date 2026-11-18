@@ -9,6 +9,7 @@ import { CAMERA_FIT, PLAYER } from "@/scene/hall";
 import { setHeading } from "@/scene/controls/headingSession";
 import { addLook, readStick, takeLook } from "@/scene/controls/touchSteer";
 import { moveWithinHall } from "@/scene/controls/walkBounds";
+import { terraceFloor } from "@/scene/architecture/terracePlan";
 import { setWalkLocked } from "@/scene/controls/walkSession";
 
 const MOVE_KEYS = new Set([
@@ -116,9 +117,6 @@ export function PlayerController() {
   }, [touch]);
 
   useFrame((_, delta) => {
-    // Eye height stays fixed. Looking around does not lift the body.
-    camera.position.y = PLAYER.eyeHeight;
-
     if (document.pointerLockElement) {
       // Pointer lock already turned the camera. Drop any leftover finger drag.
       takeLook();
@@ -152,27 +150,32 @@ export function PlayerController() {
       moveForward += pad.y;
       moveRight += pad.x;
     }
-    if (moveForward === 0 && moveRight === 0) return;
+    if (moveForward !== 0 || moveRight !== 0) {
+      // A diagonal step would otherwise be faster than a straight one.
+      const scale = 1 / Math.hypot(moveForward, moveRight);
+      moveForward *= scale;
+      moveRight *= scale;
 
-    // A diagonal step would otherwise be faster than a straight one.
-    const scale = 1 / Math.hypot(moveForward, moveRight);
-    moveForward *= scale;
-    moveRight *= scale;
+      // Camera forward is local -Z. Flatten it so the walk stays on the floor.
+      forward.current.set(0, 0, -1).applyQuaternion(camera.quaternion);
+      forward.current.y = 0;
+      if (forward.current.lengthSq() > 1e-6) {
+        forward.current.normalize();
+        // cross(forward, up) points to the visitor's right.
+        right.current.crossVectors(forward.current, up.current).normalize();
 
-    // Camera forward is local -Z. Flatten it so the walk stays on the floor.
-    forward.current.set(0, 0, -1).applyQuaternion(camera.quaternion);
-    forward.current.y = 0;
-    if (forward.current.lengthSq() < 1e-6) return;
-    forward.current.normalize();
-    // cross(forward, up) points to the visitor's right.
-    right.current.crossVectors(forward.current, up.current).normalize();
+        const step = PLAYER.speed * Math.min(delta, 0.05);
+        const nextX = camera.position.x + (forward.current.x * moveForward + right.current.x * moveRight) * step;
+        const nextZ = camera.position.z + (forward.current.z * moveForward + right.current.z * moveRight) * step;
+        const resolved = moveWithinHall(camera.position.x, camera.position.z, nextX, nextZ);
+        camera.position.x = resolved.x;
+        camera.position.z = resolved.z;
+      }
+    }
 
-    const step = PLAYER.speed * Math.min(delta, 0.05);
-    const nextX = camera.position.x + (forward.current.x * moveForward + right.current.x * moveRight) * step;
-    const nextZ = camera.position.z + (forward.current.z * moveForward + right.current.z * moveRight) * step;
-    const resolved = moveWithinHall(camera.position.x, camera.position.z, nextX, nextZ);
-    camera.position.x = resolved.x;
-    camera.position.z = resolved.z;
+    // Eye follows the landing and the treads. Indoors the floor stays at zero.
+    const eye = PLAYER.eyeHeight + terraceFloor(camera.position.x, camera.position.z);
+    camera.position.y += (eye - camera.position.y) * Math.min(1, delta * 10);
   });
 
   return (

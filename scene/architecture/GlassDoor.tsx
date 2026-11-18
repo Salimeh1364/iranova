@@ -1,7 +1,10 @@
 "use client";
 
-import { DoubleSide } from "three";
+import { useRef, type RefObject } from "react";
+import { useFrame, useThree } from "@react-three/fiber";
+import { DoubleSide, type Group, Vector3 } from "three";
 import { palette } from "@/lib/palette";
+import { stepsEndZ } from "@/scene/architecture/terracePlan";
 
 export type GlassDoorProps = {
   /** Clear width of the opening, in meters. */
@@ -15,33 +18,67 @@ const FRAME = 0.02;
 const FRAME_D = 0.035;
 // Gap where the two leaves meet.
 const GAP = 0.016;
+// How close the visitor must be, in meters, before the leaves slide apart.
+const REACH = 2.3;
+
+const doorPoint = new Vector3();
 
 /**
  * A pair of crystal-clear leaves in a minimal metal frame.
+ * They slide aside when someone comes near, and close again once the doorway is empty.
  * The glass is a light veil, not a transmission pass, so the courtyard is not redrawn.
- * There is no bottom rail. The floor runs through the opening.
  */
 export function GlassDoor({ width, height }: GlassDoorProps) {
+  const root = useRef<Group>(null);
+  const left = useRef<Group>(null);
+  const right = useRef<Group>(null);
+  const open = useRef(0);
+  const camera = useThree((state) => state.camera);
   const leafW = (width - GAP) / 2;
+  // Park each leaf fully beside the opening.
+  const slide = leafW + GAP;
+  const leftX = -(GAP / 2 + leafW / 2);
+  const rightX = GAP / 2 + leafW / 2;
+
+  useFrame((_, delta) => {
+    const group = root.current;
+    const leftLeaf = left.current;
+    const rightLeaf = right.current;
+    if (!group || !leftLeaf || !rightLeaf) return;
+
+    group.getWorldPosition(doorPoint);
+    const dx = camera.position.x - doorPoint.x;
+    const dz = camera.position.z - doorPoint.z;
+    // Inside the foyer dz is negative. On the terrace it stays positive out to the last step.
+    const outdoor = stepsEndZ() - doorPoint.z + 0.3;
+    const near = Math.abs(dx) < width / 2 + 0.85 && dz > -REACH && dz < outdoor;
+    const goal = near ? 1 : 0;
+    const step = 2.2 * Math.min(delta, 0.05);
+    open.current += Math.max(-step, Math.min(step, goal - open.current));
+
+    leftLeaf.position.x = leftX - slide * open.current;
+    rightLeaf.position.x = rightX + slide * open.current;
+  });
 
   return (
-    <group>
-      <Leaf sign={-1} leafW={leafW} height={height} />
-      <Leaf sign={1} leafW={leafW} height={height} />
+    <group ref={root}>
+      <Leaf leafRef={left} leafW={leafW} height={height} sign={-1} />
+      <Leaf leafRef={right} leafW={leafW} height={height} sign={1} />
     </group>
   );
 }
 
 function Leaf({
+  leafRef,
   sign,
   leafW,
   height,
 }: {
+  leafRef: RefObject<Group | null>;
   sign: -1 | 1;
   leafW: number;
   height: number;
 }) {
-  const centerX = sign * (GAP / 2 + leafW / 2);
   const glassW = leafW - FRAME * 2;
   // Stiles stop where the head rail begins, so the corner faces do not overlap.
   const stileH = height - FRAME;
@@ -53,7 +90,7 @@ function Leaf({
   const outerX = sign * (leafW / 2 - FRAME / 2);
 
   return (
-    <group position={[centerX, 0, 0]}>
+    <group ref={leafRef}>
       <FrameBar position={[outerX, stileH / 2, 0]} size={[FRAME, stileH, FRAME_D]} />
       <FrameBar position={[meetingX, stileH / 2, 0]} size={[FRAME, stileH, FRAME_D]} />
       {/* Head rail only. The threshold stays open. */}

@@ -7,7 +7,7 @@ import { GlassDoor } from "@/scene/architecture/GlassDoor";
 
 /**
  * Rectangular entrance in the +Z wall.
- * White jambs and a head, a clear glass pair, and steps outside.
+ * White jambs and a head, glass doors that slide open, and a stone landing with steps outside.
  * No sill. The gallery floor is the threshold.
  */
 
@@ -44,13 +44,10 @@ export function EntrancePortal() {
 
       <Casing />
       <InnerLip />
-      {/* Leaves sit in the wall plane. The opening above the floor stays clear. */}
+      {/* Leaves sit in the wall plane and slide aside as someone approaches. */}
       <GlassDoor width={OPEN_W} height={OPEN_H} />
-      {/* Outside the wall, in +Z. The top tread tucks under the outer plaster. */}
-      <ExteriorSteps
-        width={OPEN_W + 1.6}
-        startZ={HALL.wallThickness / 2 - 0.04}
-      />
+      {/* Landing and steps outside. The garden photograph stays where it is. */}
+      <ExteriorSteps />
     </group>
   );
 }

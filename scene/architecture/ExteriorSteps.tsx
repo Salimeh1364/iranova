@@ -1,53 +1,46 @@
 "use client";
 
 import { palette } from "@/lib/palette";
-
-export type ExteriorStepsProps = {
-  /** How many treads drop away from the threshold. */
-  count?: number;
-  /** Vertical drop of each tread, in meters. */
-  rise?: number;
-  /** Depth of each tread, in meters. */
-  tread?: number;
-  /** Width across the doorway, in meters. */
-  width: number;
-  /** Local Z of the inner edge of the top tread. +Z runs downhill, away from the foyer. */
-  startZ?: number;
-};
+import { TERRACE } from "@/scene/architecture/terracePlan";
 
 /**
- * Shallow stone steps outside a doorway.
- * The first tread is flush with the floor. Each one beyond it is one rise lower.
+ * A stone landing outside the garden doors, then four short steps down.
+ * The first tread is one rise below the landing. The photograph is not moved.
  */
-export function ExteriorSteps({
-  count = 3,
-  rise = 0.14,
-  tread = 0.46,
-  width,
-  startZ = 0.05,
-}: ExteriorStepsProps) {
-  // 7 cm thick, so the edge facing the foyer reads as a step rather than a ramp.
-  const thick = 0.07;
+export function ExteriorSteps() {
+  const width = TERRACE.halfWidth * 2;
+  // Local Z: the portal group is centered on the entrance wall.
+  const landingZ = TERRACE.landingZ - TERRACE.wallZ;
+  const thick = 0.1;
+  const stepThick = 0.07;
+  const stepStart = landingZ + TERRACE.landingDepth;
 
   return (
     <group>
-      {Array.from({ length: count }, (_, index) => {
-        // index 0 sits at the floor. Later treads drop by `rise`.
-        const top = -index * rise;
-        const z = startZ + index * tread + tread / 2;
-        // Nose sits on the outer edge, a few centimeters proud of the slab.
-        const noseZ = startZ + (index + 1) * tread - 0.025;
+      {/* Landing, flush with the gallery floor. */}
+      <mesh position={[0, -thick / 2, landingZ + TERRACE.landingDepth / 2]} receiveShadow castShadow>
+        <boxGeometry args={[width, thick, TERRACE.landingDepth]} />
+        <meshStandardMaterial color={palette.stone} roughness={0.58} metalness={0.04} />
+      </mesh>
+      {/* Quiet edge where the landing drops to the first tread. */}
+      <mesh position={[0, -0.02, stepStart - 0.025]} receiveShadow>
+        <boxGeometry args={[width + 0.02, 0.04, 0.05]} />
+        <meshStandardMaterial color={palette.stoneDeep} roughness={0.72} metalness={0} />
+      </mesh>
+
+      {Array.from({ length: TERRACE.steps }, (_, index) => {
+        const top = -(index + 1) * TERRACE.rise;
+        const z = stepStart + index * TERRACE.tread + TERRACE.tread / 2;
+        const noseZ = stepStart + (index + 1) * TERRACE.tread - 0.025;
 
         return (
           <group key={index}>
-            <mesh position={[0, top - thick / 2, z]} castShadow receiveShadow>
-              <boxGeometry args={[width, thick, tread]} />
-              {/* #f0eee9, roughness 0.58. Same pale stone as the floor. */}
+            <mesh position={[0, top - stepThick / 2, z]} castShadow receiveShadow>
+              <boxGeometry args={[width, stepThick, TERRACE.tread]} />
               <meshStandardMaterial color={palette.stone} roughness={0.58} metalness={0.04} />
             </mesh>
             <mesh position={[0, top - 0.02, noseZ]} castShadow receiveShadow>
               <boxGeometry args={[width + 0.02, 0.04, 0.05]} />
-              {/* #e4e0da along the nosing, a quiet edge against the pale tread. */}
               <meshStandardMaterial color={palette.stoneDeep} roughness={0.72} metalness={0} />
             </mesh>
           </group>
