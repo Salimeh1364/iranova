@@ -1,5 +1,6 @@
 import type { ArtworkPlacement } from "@/lib/types";
 import { COLUMNS, HALL, PLAN, PLAYER } from "@/scene/hall";
+import { columnsOnWall, frameCenters } from "@/scene/layout/frameLine";
 
 /**
  * Sheet size, in meters.
@@ -10,7 +11,7 @@ const FRAME_H = 1.78;
 
 /**
  * Center height of every frame.
- * Matches the visitor's eye, so the eight portraits share one line.
+ * Matches the visitor's eye, so the portraits share one line.
  */
 const EYE = PLAYER.eyeHeight;
 
@@ -18,117 +19,57 @@ const half = HALL.wallThickness / 2;
 /** How far the frame anchor stands proud of the inner plaster. */
 const PROUD = 0.04;
 
-type Column = { readonly x: number; readonly z: number };
 type Along = "x" | "z";
-
-/** Column coordinates along one wall, low to high, without duplicates. */
-function columnsAlong(axis: Along, keep: (column: Column) => boolean): number[] {
-  const values = COLUMNS.filter(keep).map((column) => (axis === "x" ? column.x : column.z));
-  return [...new Set(values)].sort((a, b) => a - b);
-}
-
-/** The first and last column in a run. Two columns are the usual gallery bay. */
-function ends(values: number[], label: string): readonly [number, number] {
-  if (values.length < 2) {
-    throw new Error(`Expected two columns for the ${label}`);
-  }
-  return [values[0], values[values.length - 1]];
-}
-
-/** One frame centered between two columns, so both side gaps match. */
-function betweenColumns(a: number, b: number): number {
-  return (a + b) / 2;
-}
-
-/**
- * One frame in the bay from a column to an inside corner.
- * The plaster beside the column equals the plaster at the corner.
- */
-function besideColumn(column: number, corner: number): number {
-  const span = Math.abs(corner - column);
-  const gap = (span - FRAME_W) / 2;
-  const dir = corner > column ? 1 : -1;
-  return column + dir * (gap + FRAME_W / 2);
-}
-
-/**
- * Two frames between two columns.
- * Three equal gaps: column, frame, frame, column.
- */
-function pairBetween(a: number, b: number): readonly [number, number] {
-  const low = Math.min(a, b);
-  const high = Math.max(a, b);
-  const gap = (high - low - FRAME_W * 2) / 3;
-  return [low + gap + FRAME_W / 2, high - gap - FRAME_W / 2];
-}
-
-// Foyer columns stand at the same two depths on the left and the right.
-const [foyerLow, foyerHigh] = ends(
-  columnsAlong("z", (column) => column.z > PLAN.divideZ && column.x < 0),
-  "foyer",
-);
-// East-gallery columns, the pair in front of the long olive wall.
-const [eastFarColumn, eastNearColumn] = ends(
-  columnsAlong("z", (column) => column.x > 1 && column.z < PLAN.divideZ && column.z > PLAN.spineFar),
-  "east gallery",
-);
-// Columns close enough to the far wall to block a portrait.
-const [farWestColumn, farEastColumn] = ends(
-  columnsAlong(
-    "x",
-    (column) => column.x > PLAN.spineLeft && column.x < PLAN.spineRight && column.z - PLAN.spineFar < 5,
-  ),
-  "far wall",
-);
-const foyerHangZ = betweenColumns(foyerLow, foyerHigh);
-// Same plaster gap used between the foyer columns, repeated on the entrance side of the outer column.
-const foyerGap = (Math.abs(foyerHigh - foyerLow) - FRAME_W) / 2;
-const foyerDoorZ = foyerHigh + foyerGap + FRAME_W / 2;
-const eastBetweenZ = betweenColumns(eastFarColumn, eastNearColumn);
-// Inner face of the far wall, where the east wall ends.
-const eastFarZ = besideColumn(eastFarColumn, PLAN.spineFar + half);
-const [farLeftX, farRightX] = pairBetween(farWestColumn, farEastColumn);
 
 const westX = PLAN.spineLeft + half + PROUD;
 const eastX = PLAN.spineRight - half - PROUD;
 const farZ = PLAN.spineFar + half + PROUD;
-// Left wall of the main gallery, the stretch from the passage to the wing.
-// The frame sits on the open plaster beside the arch, clear of the column further along.
-const passageInner = PLAN.divideZ - half;
-const galleryWestEntryZ = passageInner - FRAME_W / 2 - 0.21;
 
-// The entrance-side frame must keep a margin before the portal wall.
-const entranceInner = PLAN.spineNear - half;
-// A strip of plaster remains between the entrance-side frame and the portal wall.
-if (entranceInner - (foyerDoorZ + FRAME_W / 2) < 0.4) {
-  throw new Error("Foyer portrait beside the entrance meets the portal wall");
-}
+// Plaster ends, inner face to inner face. Openings count as an end.
+const foyerLow = PLAN.divideZ + half;
+const foyerHigh = PLAN.spineNear - half;
+const galleryLow = PLAN.spineFar + half;
+const galleryHigh = PLAN.divideZ - half;
+const galleryWestLow = PLAN.sideDoorNear;
+const sideLow = PLAN.spineLeft + half;
+const sideHigh = PLAN.spineRight - half;
+
+// Foyer side walls: two portraits, equal margins, the same on the left and the right.
+const foyerZ = frameCenters(foyerLow, foyerHigh, 2, FRAME_W, columnsOnWall(COLUMNS, "z", westX));
+// Main gallery, east wall. Two portraits across the full run.
+const eastZ = frameCenters(galleryLow, galleryHigh, 2, FRAME_W, columnsOnWall(COLUMNS, "z", eastX));
+// Far wall of the main gallery, between the west pier and the east wall.
+const farX = frameCenters(sideLow, sideHigh, 2, FRAME_W, columnsOnWall(COLUMNS, "x", farZ));
+// One portrait, centered on the partition beside the passage.
+const [galleryWestZ] = frameCenters(
+  galleryWestLow,
+  galleryHigh,
+  1,
+  FRAME_W,
+  columnsOnWall(COLUMNS, "z", westX),
+);
 
 export type PortraitSlotName = keyof typeof PORTRAIT_SLOTS;
 
 /**
  * Nine hang points.
- * Each one sits in open plaster, clear of the column shafts.
- * The larger sheets stay in the same bays: centered between columns,
- * or beside a column with equal plaster on both sides.
+ * One frame is centered on its wall. Two frames share the wall with equal margins.
  */
 export const PORTRAIT_SLOTS = {
-  // Foyer, left wall, between the two columns.
-  foyerWest: slot(westX, foyerHangZ, Math.PI / 2),
-  // Foyer, left wall, on the entrance side of the outer column. Same gap as foyerWest.
-  foyerWestDoor: slot(westX, foyerDoorZ, Math.PI / 2),
-  // Foyer, right wall. Both depths mirror the left wall.
-  foyerEast: slot(eastX, foyerHangZ, -Math.PI / 2),
-  foyerEastDoor: slot(eastX, foyerDoorZ, -Math.PI / 2),
-  // Partition beside the passage, facing the columns and the arch. Turned 90 degrees off the calligraphy wall.
-  galleryWestEntry: slot(westX, galleryWestEntryZ, Math.PI / 2),
-  // Main gallery, east wall, in the bay between its two columns.
-  galleryEastBetween: slot(eastX, eastBetweenZ, -Math.PI / 2),
-  // Main gallery, east wall, from the southern column out to the far corner.
-  galleryEastFar: slot(eastX, eastFarZ, -Math.PI / 2),
-  // Far wall of the main gallery. Equal gaps from column to frame to frame to column.
-  galleryFarLeft: slot(farLeftX, farZ, 0, "x"),
-  galleryFarRight: slot(farRightX, farZ, 0, "x"),
+  // Foyer, left wall. Nearer the passage, then nearer the entrance.
+  foyerWest: slot(westX, foyerZ[0], Math.PI / 2),
+  foyerWestDoor: slot(westX, foyerZ[1], Math.PI / 2),
+  // Foyer, right wall. The same two depths.
+  foyerEast: slot(eastX, foyerZ[0], -Math.PI / 2),
+  foyerEastDoor: slot(eastX, foyerZ[1], -Math.PI / 2),
+  // Partition beside the passage, facing the arch. Turned 90 degrees off the calligraphy wall.
+  galleryWestEntry: slot(westX, galleryWestZ, Math.PI / 2),
+  // Main gallery, east wall. Far end, then the half nearer the passage.
+  galleryEastFar: slot(eastX, eastZ[0], -Math.PI / 2),
+  galleryEastBetween: slot(eastX, eastZ[1], -Math.PI / 2),
+  // Far wall of the main gallery. Left, then right.
+  galleryFarLeft: slot(farX[0], farZ, 0, "x"),
+  galleryFarRight: slot(farX[1], farZ, 0, "x"),
 } as const;
 
 /** Build the placement record a portrait frame expects. */
@@ -157,8 +98,8 @@ function slot(x: number, z: number, rotationY: number, along: Along = "z"): Port
 }
 
 /**
- * Reject a hang that still falls behind a nearby column.
- * A column counts when it stands within 4.5 m of the wall.
+ * Reject a hang that still falls behind a column.
+ * A column against the wall must clear the shaft. One out in the room must stay off the sheet.
  */
 function assertClear(hung: PortraitSlot, along: Along) {
   const [x, y, z] = hung.position;
@@ -170,8 +111,8 @@ function assertClear(hung: PortraitSlot, along: Along) {
     if (plane > 4.5) continue;
     const delta = along === "z" ? Math.abs(z - column.z) : Math.abs(x - column.x);
     const edge = delta - FRAME_W / 2;
-    // Shaft radius is 0.2 m. The original hang keeps about a meter of plaster here.
-    if (edge < 0.95) {
+    const needed = plane < 0.5 ? 0.28 : 0.9;
+    if (edge < needed) {
       throw new Error(
         `Frame at ${x.toFixed(2)}, ${z.toFixed(2)} is only ${edge.toFixed(2)} m clear of the column at ${column.x}, ${column.z}`,
       );

@@ -26,7 +26,7 @@ export type FamousFigure = {
 
 /**
  * Nine figures across science, art, cinema, poetry, and music.
- * Hang points live in portraitLayout: one eye height, clear of the columns.
+ * Hang points live in portraitLayout: one eye height, centered on each wall.
  */
 export const figures: readonly FamousFigure[] = [
   {

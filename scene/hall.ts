@@ -38,24 +38,59 @@ export const COLUMN = {
   radius: 0.32,
 } as const;
 
+const halfWall = HALL.wallThickness / 2;
+const r = COLUMN.radius;
+
+// One base-radius in from the inner plaster, so the column sits flush to the wall.
+const xWest = PLAN.spineLeft + halfWall + r;
+const xEast = PLAN.spineRight - halfWall - r;
+const xWingWest = PLAN.wingLeft + halfWall + r;
+const xWingEast = PLAN.spineLeft - halfWall - r;
+
+const zEntrance = PLAN.spineNear - halfWall - r;
+const zFoyerArch = PLAN.divideZ + halfWall + r;
+const zGalleryArch = PLAN.divideZ - halfWall - r;
+const zFar = PLAN.spineFar + halfWall + r;
+const zWingNear = PLAN.wingNear - halfWall - r;
+
+// Just beside the opening, so the shaft flanks the jamb and the doorway stays clear.
+const xEntranceJamb = PLAN.entranceHalf + r;
+const xArchJamb = PLAN.passageHalf + r;
+const zDoorNear = PLAN.sideDoorNear + r;
+const zDoorFar = PLAN.sideDoorFar - r;
+
 /**
- * Column centers. Kept off the doorway centerlines.
- * Foyer: four columns. Main gallery: four. Wing: two.
+ * Columns at arch jambs and room corners only.
+ * Nothing stands in the middle of a room or in front of a wall.
+ * A short door pier keeps the jamb column and skips a second corner shaft.
  */
 export const COLUMNS = [
-  { x: -3.2, z: 6.4 },
-  { x: 3.2, z: 6.4 },
-  { x: -3.2, z: 2.8 },
-  { x: 3.2, z: 2.8 },
-  { x: -3.2, z: -2.2 },
-  { x: 3.2, z: -2.2 },
-  { x: -2.6, z: -8.8 },
-  { x: 3.2, z: -6.6 },
-  { x: -11.4, z: -8.4 },
-  { x: -9.2, z: -5.6 },
+  // Entrance wall, seen from the foyer.
+  { x: -xEntranceJamb, z: zEntrance },
+  { x: xEntranceJamb, z: zEntrance },
+  { x: xWest, z: zEntrance },
+  { x: xEast, z: zEntrance },
+  // Passage between the foyer and the main gallery, foyer side.
+  { x: -xArchJamb, z: zFoyerArch },
+  { x: xArchJamb, z: zFoyerArch },
+  { x: xWest, z: zFoyerArch },
+  { x: xEast, z: zFoyerArch },
+  // Same passage, gallery side.
+  { x: -xArchJamb, z: zGalleryArch },
+  { x: xArchJamb, z: zGalleryArch },
+  { x: xWest, z: zGalleryArch },
+  { x: xEast, z: zGalleryArch },
+  // Wing doorway. Gallery face, then the wing face.
+  { x: xWest, z: zDoorNear },
+  { x: xWest, z: zDoorFar },
+  { x: xWingEast, z: zDoorNear },
+  { x: xWingEast, z: zDoorFar },
+  // Outer corners of the wing.
+  { x: xWingWest, z: zFar },
+  { x: xWingWest, z: zWingNear },
+  // Far corner of the main gallery. The other far corner is the door pier above.
+  { x: xEast, z: zFar },
 ] as const;
-
-const halfWall = HALL.wallThickness / 2;
 
 /**
  * Clear interiors, measured to the inner face of the plaster.

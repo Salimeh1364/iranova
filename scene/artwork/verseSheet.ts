@@ -1,4 +1,4 @@
-import { HALL, PLAN } from "@/scene/hall";
+import { COLUMN, HALL, PLAN } from "@/scene/hall";
 
 // The whole rubai. No caption, no number, no shop mark.
 // Right and left are as you face the passage from the entrance.
@@ -35,12 +35,13 @@ const PROUD = 0.02;
 // The passage wall faces the foyer. The visitor looks at this face from the entrance.
 const faceZ = PLAN.divideZ + half + PROUD;
 
-// The clear plaster beside the opening, inside the side wall and short of the arch.
-const opening = PLAN.passageHalf;
+// The pier between the jamb column and the corner column. The ink stays clear of both capitals.
 const sideInner = PLAN.spineRight - half;
-const margin = 0.34;
-const width = sideInner - opening - margin * 2;
-const centerX = (opening + sideInner) / 2;
+const pastCapital = COLUMN.radius * 2 + 0.16;
+const pierLow = PLAN.passageHalf + pastCapital;
+const pierHigh = sideInner - pastCapital;
+const width = pierHigh - pierLow;
+const centerX = (pierLow + pierHigh) / 2;
 
 const sheet = { width, height: width * (1500 / 1400) };
 const eye = 2.55;

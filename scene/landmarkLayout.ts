@@ -1,5 +1,6 @@
 import type { ArtworkPlacement } from "@/lib/types";
 import { COLUMNS, HALL, PLAN, PLAYER } from "@/scene/hall";
+import { columnsOnWall, frameCenters } from "@/scene/layout/frameLine";
 
 /**
  * One landscape sheet for every landmark, in meters.
@@ -16,49 +17,34 @@ const PROUD = 0.04;
 
 type Along = "x" | "z";
 
-const innerWest = PLAN.wingLeft + half;
-const innerEast = PLAN.spineLeft - half;
-
 const wingWestX = PLAN.wingLeft + half + PROUD;
 const farZ = PLAN.spineFar + half + PROUD;
 const nearZ = PLAN.wingNear - half - PROUD;
 
+const innerWest = PLAN.wingLeft + half;
+const innerEast = PLAN.spineLeft - half;
 const innerFar = PLAN.spineFar + half;
 const innerNear = PLAN.wingNear - half;
 
-// Equal plaster at both ends of the far and near walls. The same X is used on both, so opposite frames line up.
-const endX = 0.55;
-const westX = innerWest + endX + SHEET.width / 2;
-const eastX = innerEast - endX - SHEET.width / 2;
-
-// The west wall is shorter, so the same sheet sits closer to the ends and still clears the columns.
-const endZ = 0.18;
-const southZ = innerFar + endZ + SHEET.width / 2;
-const northZ = innerNear - endZ - SHEET.width / 2;
-// Midway between the end frames, so the three west-wall sheets share equal gaps.
-const centerZ = (southZ + northZ) / 2;
+// Far and near walls mirror each other: two sheets, equal margins, the same X on both.
+const farX = frameCenters(innerWest, innerEast, 2, SHEET.width, columnsOnWall(COLUMNS, "x", farZ));
+// Three sheets on the long west wall. Equal margins at the corners, equal gaps between.
+const westZ = frameCenters(innerFar, innerNear, 3, SHEET.width, columnsOnWall(COLUMNS, "z", wingWestX));
 
 export type LandmarkSlotName = keyof typeof LANDMARK_SLOTS;
 
 /**
- * Every landmark hangs in the west wing, the back room, on one shared sheet.
+ * Every landmark hangs in the west wing, on one shared sheet.
  * Far and near walls mirror each other. The west wall carries three sheets on one line.
  */
 export const LANDMARK_SLOTS = {
-  // Far wall, west end. Same X as the near wall's west frame.
-  wingFarWest: hang(westX, farZ, 0, "x", SHEET),
-  // Far wall, east end. Same X as the near wall's east frame.
-  wingFarEast: hang(eastX, farZ, 0, "x", SHEET),
-  // Near wall, west end.
-  wingNearWest: hang(westX, nearZ, Math.PI, "x", SHEET),
-  // Near wall, east end.
-  wingNearEast: hang(eastX, nearZ, Math.PI, "x", SHEET),
-  // Long west wall, south end.
-  wingWest: hang(wingWestX, southZ, Math.PI / 2, "z", SHEET),
-  // Long west wall, the open center between the two end frames.
-  wingWestCenter: hang(wingWestX, centerZ, Math.PI / 2, "z", SHEET),
-  // Long west wall, north end. Same inset as the south frame.
-  wingWestNorth: hang(wingWestX, northZ, Math.PI / 2, "z", SHEET),
+  wingFarWest: hang(farX[0], farZ, 0, "x", SHEET),
+  wingFarEast: hang(farX[1], farZ, 0, "x", SHEET),
+  wingNearWest: hang(farX[0], nearZ, Math.PI, "x", SHEET),
+  wingNearEast: hang(farX[1], nearZ, Math.PI, "x", SHEET),
+  wingWest: hang(wingWestX, westZ[0], Math.PI / 2, "z", SHEET),
+  wingWestCenter: hang(wingWestX, westZ[1], Math.PI / 2, "z", SHEET),
+  wingWestNorth: hang(wingWestX, westZ[2], Math.PI / 2, "z", SHEET),
 } as const;
 
 export function landmarkPlacement(
@@ -90,7 +76,7 @@ function hang(x: number, z: number, rotationY: number, along: Along, size: Size)
   return hung;
 }
 
-/** A column within 5.2 m of the wall must leave plaster beside the frame. */
+/** A column against the wall must clear the shaft. One out in the room must stay off the sheet. */
 function assertClear(position: readonly [number, number, number], along: Along, width: number) {
   const [x, y, z] = position;
   if (Math.abs(y - EYE) > 0.001) {
@@ -101,8 +87,8 @@ function assertClear(position: readonly [number, number, number], along: Along, 
     if (plane > 5.2) continue;
     const delta = along === "z" ? Math.abs(z - column.z) : Math.abs(x - column.x);
     const edge = delta - width / 2;
-    // Shaft radius is 0.2 m. 0.44 m to the center still leaves plaster beside the shaft.
-    if (edge < 0.44) {
+    const needed = plane < 0.5 ? 0.28 : 0.5;
+    if (edge < needed) {
       throw new Error(
         `Landmark at ${x.toFixed(2)}, ${z.toFixed(2)} is only ${edge.toFixed(2)} m clear of the column at ${column.x}, ${column.z}`,
       );
