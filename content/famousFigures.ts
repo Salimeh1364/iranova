@@ -25,14 +25,13 @@ export type FamousFigure = {
 };
 
 /**
- * Eight figures across science, art, cinema, poetry, and music.
+ * Nine figures across science, art, cinema, poetry, and music.
  * Hang points live in portraitLayout: one eye height, clear of the columns.
  */
 export const figures: readonly FamousFigure[] = [
   {
     id: "mirzakhani",
     image: "/images/figures/mirzakhani.jpg",
-    credit: "Florian Caullery, CC BY-SA 3.0",
     placement: portraitPlacement("mirzakhani", "foyerWest", 3),
     copy: {
       en: {
@@ -55,6 +54,36 @@ export const figures: readonly FamousFigure[] = [
         years: "۱۹۷۷–۲۰۱۷",
         biography:
           "مریم میرزاخانی ریاضیدانی بود که نگاه ما به هندسه را دگرگون کرد. او در تهران زاده شد، در المپیاد جهانی ریاضی مدال طلا گرفت، در هاروارد دکتری گرفت و استاد دانشگاه استنفورد شد. در سال ۲۰۱۴ نخستین زنی بود که مدال فیلدز را، برای پژوهش‌هایش دربارهٔ دینامیک و هندسهٔ رویه‌های ریمانی و فضاهای مدول آن‌ها، دریافت کرد.",
+      },
+    },
+  },
+  {
+    id: "forough",
+    image: "/images/figures/forough.jpg",
+    // Ferdowsi magazine portrait, released to the public domain.
+    credit: "Ali Khadem, public domain",
+    placement: portraitPlacement("forough", "galleryWestEntry", 23),
+    copy: {
+      en: {
+        name: "Forough Farrokhzad",
+        field: "Poetry",
+        years: "1934–1967",
+        biography:
+          "Forough Farrokhzad was a poet and filmmaker of modern Iran. Born in Tehran, she published The Captive, The Wall, Rebellion, and Another Birth, and made the documentary The House Is Black. Her poems speak in a direct voice about desire, the body, and a society that tried to keep women quiet. She died in a car accident in 1967, at the age of thirty-two.",
+      },
+      de: {
+        name: "Forough Farrokhzad",
+        field: "Lyrik",
+        years: "1934–1967",
+        biography:
+          "Forough Farrokhzad war Dichterin und Filmemacherin der iranischen Moderne. 1934 in Teheran geboren, veröffentlichte sie Die Gefangene, Die Mauer, Rebellion und Eine andere Geburt und drehte den Dokumentarfilm Das Haus ist schwarz. Ihre Gedichte sprechen offen über Begehren, den Körper und eine Gesellschaft, die Frauen zum Schweigen bringen wollte. Sie starb 1967 bei einem Autounfall, mit zweiunddreißig Jahren.",
+      },
+      fa: {
+        name: "فروغ فرخزاد",
+        field: "شعر",
+        years: "۱۹۳۴–۱۹۶۷",
+        biography:
+          "فروغ فرخزاد شاعر و فیلم‌ساز نو ایران بود. او در تهران زاده شد و مجموعه‌های «اسیر»، «دیوار»، «عصیان» و «تولدی دیگر» را منتشر کرد و فیلم «خانه سیاه است» را ساخت. شعرهایش با صدایی روشن از میل، بدن و جامعه‌ای می‌گویند که می‌خواست زنان را خاموش کند. در سال ۱۹۶۷، در سی‌ودو سالگی، در تصادف رانندگی درگذشت.",
       },
     },
   },

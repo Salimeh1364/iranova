@@ -92,6 +92,10 @@ const [farLeftX, farRightX] = pairBetween(farWestColumn, farEastColumn);
 const westX = PLAN.spineLeft + half + PROUD;
 const eastX = PLAN.spineRight - half - PROUD;
 const farZ = PLAN.spineFar + half + PROUD;
+// Left wall of the main gallery, the stretch from the passage to the wing.
+// The frame sits on the open plaster beside the arch, clear of the column further along.
+const passageInner = PLAN.divideZ - half;
+const galleryWestEntryZ = passageInner - FRAME_W / 2 - 0.21;
 
 // The entrance-side frame must keep a margin before the portal wall.
 const entranceInner = PLAN.spineNear - half;
@@ -103,7 +107,7 @@ if (entranceInner - (foyerDoorZ + FRAME_W / 2) < 0.4) {
 export type PortraitSlotName = keyof typeof PORTRAIT_SLOTS;
 
 /**
- * Eight hang points.
+ * Nine hang points.
  * Each one sits in open plaster, clear of the column shafts.
  * The larger sheets stay in the same bays: centered between columns,
  * or beside a column with equal plaster on both sides.
@@ -116,6 +120,8 @@ export const PORTRAIT_SLOTS = {
   // Foyer, right wall. Both depths mirror the left wall.
   foyerEast: slot(eastX, foyerHangZ, -Math.PI / 2),
   foyerEastDoor: slot(eastX, foyerDoorZ, -Math.PI / 2),
+  // Partition beside the passage, facing the columns and the arch. Turned 90 degrees off the calligraphy wall.
+  galleryWestEntry: slot(westX, galleryWestEntryZ, Math.PI / 2),
   // Main gallery, east wall, in the bay between its two columns.
   galleryEastBetween: slot(eastX, eastBetweenZ, -Math.PI / 2),
   // Main gallery, east wall, from the southern column out to the far corner.
