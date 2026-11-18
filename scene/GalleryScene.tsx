@@ -5,6 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { getDeviceProfile, getServerDeviceProfile, subscribeDeviceProfile } from "@/lib/deviceProfile";
 import { initialCamera } from "@/scene/FrameCamera";
 import { PlayerController } from "@/scene/controls/PlayerController";
+import { ArtworkHint } from "@/scene/artwork/ArtworkHint";
 import { GalleryHall } from "@/scene/GalleryHall";
 
 /**
@@ -32,6 +33,7 @@ export default function GalleryScene() {
       <color attach="background" args={["#e7efe6"]} />
       <fog attach="fog" args={["#e7efe4", 24, 56]} />
       <PlayerController />
+      <ArtworkHint />
       {/* Warm bounce on the floor, pale ground on the ceiling, so shadows stay airy. */}
       <hemisphereLight args={["#fff3d6", "#eceae4", 0.72]} />
       {/* Warm fill. High enough that a shadow never reads as black. */}

@@ -241,6 +241,37 @@ h1 {
   pointer-events: none;
 }
 
+/* Same glass as .walk-prompt: blur, a faint white tint, a thin light edge, white type. */
+.frame-hint {
+  position: absolute;
+  z-index: 8;
+  margin: 0;
+  padding: 0.45rem 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 1.25rem;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  line-height: 1.35;
+  white-space: nowrap;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: translate(-50%, calc(-100% - 0.55rem));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+
+.frame-hint.is-on {
+  opacity: 1;
+}
+
+html[dir="rtl"] .frame-hint {
+  letter-spacing: 0;
+}
+
 .walk-prompt:focus-visible {
   outline: 2px solid #fff;
   outline-offset: 3px;

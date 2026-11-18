@@ -15,6 +15,8 @@ export const en: Dictionary = {
     walkStart: "Click to walk",
     walkHint: "Look with the mouse. Esc releases the cursor.",
     touchHint: "Drag to look. The pad walks. Tap a frame.",
+    frameHint: "Click to read",
+    frameHintTouch: "Tap to read",
     touchPad: "Walk pad",
     loading: "Preparing the gallery…",
     unavailable:

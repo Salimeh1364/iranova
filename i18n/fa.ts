@@ -14,6 +14,8 @@ export const fa: Dictionary = {
     walkStart: "برای راه رفتن کلیک کنید",
     walkHint: "با ماوس نگاه کنید. Esc نشانگر را آزاد می‌کند.",
     touchHint: "برای نگاه کردن بکشید. با پد راه بروید. روی قاب بزنید.",
+    frameHint: "برای خواندن کلیک کنید",
+    frameHintTouch: "برای خواندن بزنید",
     touchPad: "پد راه رفتن",
     loading: "گالری در حال آماده‌سازی است…",
     unavailable:

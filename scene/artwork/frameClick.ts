@@ -2,11 +2,15 @@
 
 import { useRef } from "react";
 import type { ThreeEvent } from "@react-three/fiber";
+import { Vector3 } from "three";
+import { setFrameHover } from "@/scene/controls/frameHintSession";
 
 // A look-around drag longer than this, in pixels, is not a click.
 const DRAG_PX = 8;
 // A fingertip jitters more than a mouse, so a tap still opens the frame.
 const TOUCH_PX = 18;
+
+const hoverPoint = new Vector3();
 
 /**
  * Pointer handlers for the photograph and the nameplate only.
@@ -48,10 +52,14 @@ export function useArtworkClick(onSelect: () => void) {
   const onPointerOver = (event: ThreeEvent<PointerEvent>) => {
     event.stopPropagation();
     document.body.style.cursor = "pointer";
+    // Lift the label toward the top of the frame.
+    event.object.getWorldPosition(hoverPoint);
+    setFrameHover({ x: hoverPoint.x, y: hoverPoint.y + 0.55, z: hoverPoint.z });
   };
 
   const onPointerOut = () => {
     document.body.style.cursor = "";
+    setFrameHover(null);
     origin.current = null;
     moved.current = 0;
     dragged.current = false;

@@ -14,6 +14,8 @@ export type Dictionary = {
     walkStart: string;
     walkHint: string;
     touchHint: string;
+    frameHint: string;
+    frameHintTouch: string;
     touchPad: string;
     loading: string;
     unavailable: string;

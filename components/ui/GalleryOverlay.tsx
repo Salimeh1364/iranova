@@ -2,6 +2,7 @@
 
 import { AmbientAudioPlayer } from "@/components/ui/AmbientAudioPlayer";
 import { FigureBioModal } from "@/components/ui/FigureBioModal";
+import { FrameHint } from "@/components/ui/FrameHint";
 import { HeadingCompass } from "@/components/ui/HeadingCompass";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 import { TouchSteer } from "@/components/ui/TouchSteer";
@@ -33,6 +34,7 @@ export function GalleryChrome({ children }: { children: React.ReactNode }) {
           <LanguageSwitcher />
         </div>
         <WalkPrompt />
+        <FrameHint />
         <TouchSteer />
         <HeadingCompass />
         <FigureBioModal />
